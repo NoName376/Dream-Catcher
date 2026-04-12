@@ -1,28 +1,47 @@
-<div class='feed-container'>
-  <div class='feed-header'>
-    <h1>Dream Stream</h1>
-    <p>Catch up with the collective subconsious</p>
-  </div>
+<div class='feed-page'>
+  <div class='feed-container'>
+    <div class='feed-controls'>
+      <div class='search-bar'>
+        <input 
+          type='text' 
+          [(ngModel)]='searchQuery' 
+          (keyup.enter)='onSearch()'
+          placeholder='Filter by #hashtags...'
+        />
+        <button (click)='onSearch()' class='search-btn'>🔍</button>
+      </div>
 
-  <div class='feed-content'>
-    <div class='development-banner'>
-      <div class='glimmer-icon'>✨</div>
-      <h2>Under Construction</h2>
-      <p>The collective dream is still manifesting. Check back soon for the full experience.</p>
+      <div class='sort-toggle'>
+        <button 
+          [class.active]="sortMode() === 'newest'" 
+          (click)="onSortChange('newest')"
+        >✨ Newest</button>
+        <button 
+          [class.active]="sortMode() === 'popular'" 
+          (click)="onSortChange('popular')"
+        >🔥 Popular</button>
+      </div>
     </div>
 
-    @defer (on viewport) {
-      <div class='placeholder-list'>
-        <div *ngFor='let post of posts; trackBy: trackById' class='placeholder-card'>
-          <div class='avatar-stub'></div>
-          <div class='text-lines'>
-            <div class='line-long'></div>
-            <div class='line-short'></div>
-          </div>
+    <app-post-create></app-post-create>
+
+    <div class='posts-list'>
+      <app-post-card 
+        *ngFor='let post of posts(); trackBy: trackById' 
+        [post]='post'
+        (liked)='initialLoad()'
+        (bookmarked)='initialLoad()'
+      ></app-post-card>
+
+      <div #scrollTracker class='scroll-anchor'>
+        <div *ngIf='isLoading()' class='loading-indicator'>
+          <span class='sparkle'>✨</span>Manifesting more dreams...
         </div>
       </div>
-    } @placeholder {
-      <div class='loading-placeholder'>Manifesting dreams...</div>
-    }
+
+      <div *ngIf='!posts().length && !isLoading()' class='empty-state'>
+        No dreams found matching your search or sort criteria.
+      </div>
+    </div>
   </div>
 </div>

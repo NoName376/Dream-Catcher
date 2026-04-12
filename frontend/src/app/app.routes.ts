@@ -11,18 +11,31 @@ export const routes: Routes = [
     loadComponent: () => import('./components/auth/register/register').then((m) => m.Register)
   },
   {
-    path: 'feed',
-    canActivate: [authGuard],
-    loadComponent: () => import('./components/feed/feed').then((m) => m.Feed)
-  },
-  {
-    path: 'profile',
-    canActivate: [authGuard],
-    loadComponent: () => import('./components/user-profile/user-profile').then((m) => m.UserProfile)
-  },
-  {
     path: '',
-    redirectTo: 'feed',
-    pathMatch: 'full'
+    loadComponent: () => import('./components/layout/app-layout/app-layout').then((m) => m.AppLayout),
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'feed',
+        loadComponent: () => import('./components/feed/feed').then((m) => m.Feed)
+      },
+      {
+        path: 'bookmarks',
+        loadComponent: () => import('./components/bookmarks/bookmarks').then((m) => m.Bookmarks)
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./components/user-profile/user-profile').then((m) => m.UserProfile)
+      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./components/settings/settings/settings').then((m) => m.Settings)
+      },
+      {
+        path: '',
+        redirectTo: 'feed',
+        pathMatch: 'full'
+      }
+    ]
   }
 ];

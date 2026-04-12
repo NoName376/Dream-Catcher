@@ -1,0 +1,30 @@
+<div class='hashtag-selector'>
+  <div class='selected-tags' *ngIf='selectedHashtags().length'>
+    <span *ngFor='let tag of selectedHashtags()' class='tag-pill'>
+      #{{ tag }}
+      <button (click)='removeHashtag(tag)' class='remove-btn'>×</button>
+    </span>
+  </div>
+
+  <div class='input-container'>
+    <input
+      type='text'
+      [(ngModel)]='hashtagInput'
+      (keydown.enter)='onEnter(); $event.preventDefault()'
+      placeholder='Add dream keys (max 7)...'
+      [disabled]='selectedHashtags().length >= maxTags'
+    />
+  </div>
+
+  <div class='suggestions' *ngIf='suggestions().length && selectedHashtags().length < maxTags'>
+    <span class='label'>Popular:</span>
+    <button 
+      *ngFor='let tag of suggestions()' 
+      (click)='addHashtag(tag.name)'
+      class='suggestion-pill'
+      [disabled]='selectedHashtags().includes(tag.name)'
+    >
+      #{{ tag.name }}
+    </button>
+  </div>
+</div>

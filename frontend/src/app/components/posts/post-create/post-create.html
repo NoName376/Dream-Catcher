@@ -1,0 +1,26 @@
+<div class='post-create-card'>
+  <textarea
+    [(ngModel)]='content'
+    placeholder='Share your dream...'
+    rows='3'
+    [disabled]='isSubmitting()'
+  ></textarea>
+
+  <div class='tag-selector-container'>
+    <app-hashtag-selector (hashtagChanged)='onTagsChanged($event)'></app-hashtag-selector>
+  </div>
+
+  <div class='footer'>
+    <span class='char-count' [class.limit]='content().length > 500'>
+      {{ content().length }}/500
+    </span>
+    <button 
+      class='btn-primary' 
+      [disabled]='!content().trim() || content().length > 500 || isSubmitting()'
+      (click)='onSubmit()'
+    >
+      <span *ngIf='!isSubmitting()'>Cast Dream</span>
+      <span *ngIf='isSubmitting()' class='loader'></span>
+    </button>
+  </div>
+</div>

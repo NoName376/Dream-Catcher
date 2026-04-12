@@ -13,3 +13,38 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+class Hashtag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    usage_count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"#{self.name}"
+
+class Post(models.Model):
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts')
+    content = models.TextField()
+    hashtags = models.ManyToManyField(Hashtag, related_name='posts', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.author.username}: {self.content[:30]}..."
+
+class Like(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='likes')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes_received')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'post')
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='bookmarks')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='saved_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'post')

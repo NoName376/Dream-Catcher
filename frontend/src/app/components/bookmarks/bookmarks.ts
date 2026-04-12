@@ -1,27 +1,23 @@
 import { Component, inject, signal, OnInit, AfterViewInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { PostService } from '../../services/post/post';
-import { PostCreate } from '../posts/post-create/post-create';
 import { PostCard } from '../posts/post-card/post-card';
 
 @Component({
-  selector: 'app-feed',
+  selector: 'app-bookmarks',
   standalone: true,
-  imports: [CommonModule, FormsModule, PostCreate, PostCard],
-  templateUrl: './feed.html',
-  styleUrl: './feed.css'
+  imports: [CommonModule, PostCard],
+  templateUrl: './bookmarks.html',
+  styleUrl: './bookmarks.css'
 })
-export class Feed implements OnInit, AfterViewInit, OnDestroy {
+export class Bookmarks implements OnInit, AfterViewInit, OnDestroy {
   private readonly _postService = inject(PostService);
   
   @ViewChild('scrollTracker') scrollTracker?: ElementRef;
   private _observer?: IntersectionObserver;
 
   public readonly posts = this._postService.posts;
-  public readonly searchQuery = signal<string>('');
   public readonly isLoading = signal<boolean>(false);
-  public readonly sortMode = signal<string>('newest');
   public readonly hasMore = this._postService.hasMore;
 
   public ngOnInit(): void {
@@ -37,36 +33,22 @@ export class Feed implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public initialLoad(): void {
-    this.loadPosts(1);
+    this.loadBookmarks(1);
   }
 
-  public loadPosts(page: number): void {
+  public loadBookmarks(page: number): void {
     if (this.isLoading()) return;
-    
     this.isLoading.set(true);
-    const hashtags = this.searchQuery() 
-      ? this.searchQuery().split(' ').map(h => h.replace(/#/g, '')) 
-      : [];
-    
-    this._postService.getPosts(hashtags, false, page, this.sortMode()).subscribe({
+    this._postService.getPosts([], true, page).subscribe({
       next: () => this.isLoading.set(false),
       error: () => this.isLoading.set(false)
     });
   }
 
-  public onSortChange(mode: string): void {
-    this.sortMode.set(mode);
-    this.initialLoad();
-  }
-
-  public onSearch(): void {
-    this.initialLoad();
-  }
-
   private setupInfiniteScroll(): void {
     this._observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && this.hasMore() && !this.isLoading()) {
-        this.loadPosts(this._postService.currentPage() + 1);
+        this.loadBookmarks(this._postService.currentPage() + 1);
       }
     }, { threshold: 0.1 });
 

@@ -1,0 +1,57 @@
+.security-section {
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(168, 230, 207, 0.05);
+  border-radius: 20px;
+}
+
+h3 {
+  color: #a8e6cf;
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: rgba(168, 230, 207, 0.4);
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 12px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.status-message {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.status-message.success {
+  background: rgba(113, 178, 128, 0.1);
+  border: 1px solid rgba(113, 178, 128, 0.2);
+  color: #a8e6cf;
+}
+
+.status-message.error {
+  background: rgba(255, 139, 148, 0.1);
+  border: 1px solid rgba(255, 139, 148, 0.2);
+  color: #ff8b94;
+}
