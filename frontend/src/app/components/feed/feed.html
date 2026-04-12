@@ -1,0 +1,28 @@
+<div class='feed-container'>
+  <div class='feed-header'>
+    <h1>Dream Stream</h1>
+    <p>Catch up with the collective subconsious</p>
+  </div>
+
+  <div class='feed-content'>
+    <div class='development-banner'>
+      <div class='glimmer-icon'>✨</div>
+      <h2>Under Construction</h2>
+      <p>The collective dream is still manifesting. Check back soon for the full experience.</p>
+    </div>
+
+    @defer (on viewport) {
+      <div class='placeholder-list'>
+        <div *ngFor='let post of posts; trackBy: trackById' class='placeholder-card'>
+          <div class='avatar-stub'></div>
+          <div class='text-lines'>
+            <div class='line-long'></div>
+            <div class='line-short'></div>
+          </div>
+        </div>
+      </div>
+    } @placeholder {
+      <div class='loading-placeholder'>Manifesting dreams...</div>
+    }
+  </div>
+</div>

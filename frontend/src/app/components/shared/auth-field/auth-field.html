@@ -1,0 +1,13 @@
+<div class='field-container'>
+  <label [for]='id()'>{{ label() }}</label>
+  <input
+    [id]='id()'
+    [type]='type()'
+    [formControl]='control()'
+    [placeholder]='placeholder()'
+    [class.invalid]='control().invalid && control().touched'
+  />
+  <div class='error-message' *ngIf='control().invalid && control().touched'>
+    {{ getErrorMessage() }}
+  </div>
+</div>
