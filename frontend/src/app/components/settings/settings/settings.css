@@ -1,0 +1,41 @@
+.settings-container {
+  padding: 40px 0;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.settings-header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+h1 {
+  color: #a8e6cf;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.settings-header p {
+  color: rgba(168, 230, 207, 0.4);
+  font-size: 1.1rem;
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Override profile container alignment when inside settings */
+:host ::ng-deep .profile-container {
+  min-height: auto;
+  padding: 0;
+  background: transparent;
+}
+
+:host ::ng-deep .profile-card {
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(168, 230, 207, 0.05);
+}

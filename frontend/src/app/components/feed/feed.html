@@ -1,28 +1,32 @@
-<div class='feed-container'>
-  <div class='feed-header'>
-    <h1>Dream Stream</h1>
-    <p>Catch up with the collective subconsious</p>
-  </div>
-
-  <div class='feed-content'>
-    <div class='development-banner'>
-      <div class='glimmer-icon'>✨</div>
-      <h2>Under Construction</h2>
-      <p>The collective dream is still manifesting. Check back soon for the full experience.</p>
+<div class='feed-page'>
+  <div class='feed-container'>
+    <div class='search-bar'>
+      <input 
+        type='text' 
+        [(ngModel)]='searchQuery' 
+        (keyup.enter)='onSearch()'
+        placeholder='Search dreams by #hashtags...'
+      />
+      <button (click)='onSearch()' class='search-btn'>🔍</button>
     </div>
 
-    @defer (on viewport) {
-      <div class='placeholder-list'>
-        <div *ngFor='let post of posts; trackBy: trackById' class='placeholder-card'>
-          <div class='avatar-stub'></div>
-          <div class='text-lines'>
-            <div class='line-long'></div>
-            <div class='line-short'></div>
-          </div>
+    <app-post-create></app-post-create>
+
+    <div class='posts-list'>
+      @defer (on viewport) {
+        <app-post-card 
+          *ngFor='let post of posts(); trackBy: trackById' 
+          [post]='post'
+          (liked)='loadPosts()'
+          (bookmarked)='loadPosts()'
+        ></app-post-card>
+
+        <div *ngIf='!posts().length && !isLoading()' class='empty-state'>
+          No dreams found Matching these keys.
         </div>
-      </div>
-    } @placeholder {
-      <div class='loading-placeholder'>Manifesting dreams...</div>
-    }
+      } @placeholder {
+        <div class='loading-spinner'>✨ Manifesting dreams...</div>
+      }
+    </div>
   </div>
 </div>

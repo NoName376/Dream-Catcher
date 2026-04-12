@@ -1,42 +1,31 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { PostService } from '../../services/post/post';
-import { PostCreate } from '../posts/post-create/post-create';
 import { PostCard } from '../posts/post-card/post-card';
 
 @Component({
-  selector: 'app-feed',
+  selector: 'app-bookmarks',
   standalone: true,
-  imports: [CommonModule, FormsModule, PostCreate, PostCard],
-  templateUrl: './feed.html',
-  styleUrl: './feed.css'
+  imports: [CommonModule, PostCard],
+  templateUrl: './bookmarks.html',
+  styleUrl: './bookmarks.css'
 })
-export class Feed implements OnInit {
+export class Bookmarks implements OnInit {
   private readonly _postService = inject(PostService);
 
   public readonly posts = this._postService.posts;
-  public readonly searchQuery = signal<string>('');
   public readonly isLoading = signal<boolean>(false);
 
   public ngOnInit(): void {
-    this.loadPosts();
+    this.loadBookmarks();
   }
 
-  public loadPosts(): void {
+  public loadBookmarks(): void {
     this.isLoading.set(true);
-    const hashtags = this.searchQuery() 
-      ? this.searchQuery().split(' ').map(h => h.replace(/#/g, '')) 
-      : [];
-    
-    this._postService.getPosts(hashtags).subscribe({
+    this._postService.getPosts([], true).subscribe({
       next: () => this.isLoading.set(false),
       error: () => this.isLoading.set(false)
     });
-  }
-
-  public onSearch(): void {
-    this.loadPosts();
   }
 
   public trackById(index: number, item: any): number {

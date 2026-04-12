@@ -1,0 +1,35 @@
+<div class='security-section'>
+  <h3>Security Settings</h3>
+  <p class='subtitle'>Safeguard your dream identity</p>
+
+  <form [formGroup]='passwordForm' (ngSubmit)='onSubmit()'>
+    <app-auth-field
+      id='old_password'
+      label='Old Password'
+      type='password'
+      placeholder='••••••••'
+      [control]='oldPasswordControl'
+    ></app-auth-field>
+
+    <app-auth-field
+      id='new_password'
+      label='New Password'
+      type='password'
+      placeholder='••••••••'
+      [control]='newPasswordControl'
+    ></app-auth-field>
+
+    <button type='submit' [disabled]='passwordForm.invalid || isUpdating()' class='btn-primary'>
+      <span *ngIf='!isUpdating()'>Change Password</span>
+      <span *ngIf='isUpdating()' class='loader'></span>
+    </button>
+
+    <div *ngIf='updateSuccess()' class='status-message success'>
+      {{ updateSuccess() }}
+    </div>
+
+    <div *ngIf='updateError()' class='status-message error'>
+      {{ updateError() }}
+    </div>
+  </form>
+</div>

@@ -1,89 +1,66 @@
+.feed-page {
+  padding: 40px 0;
+}
+
 .feed-container {
-  min-height: 100vh;
-  background: #0f1715;
-  padding: 40px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.feed-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-h1 {
-  color: #a8e6cf;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.feed-content {
   width: 100%;
   max-width: 600px;
+  margin: 0 auto;
 }
 
-.development-banner {
-  background: rgba(168, 230, 207, 0.05);
-  border: 1px dashed rgba(168, 230, 207, 0.2);
-  border-radius: 20px;
-  padding: 40px;
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.glimmer-icon {
-  font-size: 3rem;
-  margin-bottom: 16px;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.1); }
-}
-
-.placeholder-list {
+.search-bar {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  opacity: 0.4;
-}
-
-.placeholder-card {
-  background: rgba(255, 255, 255, 0.03);
-  padding: 20px;
-  border-radius: 16px;
-  display: flex;
-  gap: 16px;
-}
-
-.avatar-stub {
-  width: 48px;
-  height: 48px;
-  background: rgba(168, 230, 207, 0.1);
-  border-radius: 50%;
-}
-
-.text-lines {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   gap: 12px;
+  margin-bottom: 32px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 8px;
+  border-radius: 16px;
+  border: 1px solid rgba(168, 230, 207, 0.1);
+}
+
+.search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  outline: none;
+  font-size: 1rem;
+}
+
+.search-btn {
+  background: rgba(168, 230, 207, 0.1);
+  border: none;
+  color: #a8e6cf;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.2s;
 }
 
-.line-long {
-  height: 12px;
-  width: 80%;
-  background: rgba(168, 230, 207, 0.1);
-  border-radius: 6px;
+.search-btn:hover {
+  background: rgba(168, 230, 207, 0.2);
 }
 
-.line-short {
-  height: 12px;
-  width: 40%;
-  background: rgba(168, 230, 207, 0.1);
-  border-radius: 6px;
+.posts-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: rgba(168, 230, 207, 0.4);
+  font-style: italic;
+}
+
+.loading-spinner {
+  text-align: center;
+  color: #a8e6cf;
+  padding: 20px;
 }

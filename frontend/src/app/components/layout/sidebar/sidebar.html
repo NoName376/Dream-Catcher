@@ -1,0 +1,25 @@
+<aside class='sidebar'>
+  <div class='logo'>
+    <span class='logo-icon'>💤</span>
+    <span class='logo-text'>Dream Catcher</span>
+  </div>
+
+  <nav class='nav-menu'>
+    <a 
+      *ngFor='let item of menuItems' 
+      [routerLink]='item.route' 
+      routerLinkActive='active'
+      class='nav-item'
+    >
+      <span class='icon'>{{ item.icon }}</span>
+      <span class='label'>{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <div class='sidebar-footer'>
+    <button class='logout-btn' (click)='onLogout()'>
+      <span class='icon'>🚪</span>
+      <span class='label'>Wake Up</span>
+    </button>
+  </div>
+</aside>
