@@ -8,9 +8,13 @@
     <app-post-card 
       *ngFor='let post of posts(); trackBy: trackById' 
       [post]='post'
-      (liked)='loadBookmarks()'
-      (bookmarked)='loadBookmarks()'
+      (liked)='initialLoad()'
+      (bookmarked)='initialLoad()'
     ></app-post-card>
+
+    <div #scrollTracker class='scroll-anchor'>
+      <div *ngIf='isLoading()' class='loading-indicator'> ✨ manifesting...</div>
+    </div>
 
     <div *ngIf='!posts().length && !isLoading()' class='empty-state'>
       You haven't preserved any dreams yet.

@@ -11,15 +11,23 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Post.objects.all().select_related('author').prefetch_related('hashtags', 'likes_received', 'saved_by')
-        # Filter by hashtags if provided
+        queryset = queryset.annotate(likes_count=Count('likes_received'))
+        
+        # Filtering
         hashtag_names = self.request.query_params.getlist('hashtags')
         if hashtag_names:
             queryset = queryset.filter(hashtags__name__in=hashtag_names).distinct()
         
-        # Filter by user (for Bookmarks or own posts)
         is_bookmarks = self.request.query_params.get('bookmarks') == 'true'
         if is_bookmarks and self.request.user.is_authenticated:
             queryset = queryset.filter(saved_by__user=self.request.user)
+
+        # Sorting
+        sort_by = self.request.query_params.get('sort', 'newest')
+        if sort_by == 'popular':
+            queryset = queryset.order_by('-likes_count', '-created_at')
+        else:
+            queryset = queryset.order_by('-created_at')
             
         return queryset
 

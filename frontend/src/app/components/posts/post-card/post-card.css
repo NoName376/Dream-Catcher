@@ -99,7 +99,26 @@
   background: rgba(168, 230, 207, 0.05);
 }
 
-.action-btn.active.like { color: #ff8b94; }
-.action-btn.active.bookmark { color: #ffd3b6; }
+.action-btn.active.like { 
+  color: #ff8b94;
+  animation: heartBeat 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.action-btn.active.bookmark { 
+  color: #ffd3b6;
+  animation: bookmarkPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+@keyframes bookmarkPop {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-5px) scale(1.1); }
+  100% { transform: translateY(0) scale(1); }
+}
 
 .count { font-weight: 600; }
