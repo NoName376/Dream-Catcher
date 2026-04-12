@@ -1,0 +1,50 @@
+<div class='auth-container'>
+  <div class='auth-card'>
+    <app-auth-header title='Join the Dream' subtitle='Create your identity in the dreamscape'></app-auth-header>
+    
+    <form [formGroup]='registerForm' (ngSubmit)='onSubmit()'>
+      <app-auth-field
+        id='username'
+        label='Username'
+        type='text'
+        placeholder='choose a username'
+        [control]='usernameControl'
+      ></app-auth-field>
+
+      <app-auth-field
+        id='email'
+        label='Email Address'
+        type='email'
+        placeholder='your@email.com'
+        [control]='emailControl'
+      ></app-auth-field>
+
+      <app-auth-field
+        id='password'
+        label='Password'
+        type='password'
+        placeholder='••••••••'
+        [control]='passwordControl'
+      ></app-auth-field>
+
+      <app-auth-field
+        id='confirmPassword'
+        label='Confirm Password'
+        type='password'
+        placeholder='••••••••'
+        [control]='confirmPasswordControl'
+      ></app-auth-field>
+
+      <button type='submit' [disabled]='registerForm.invalid || isLoading()' class='btn-primary'>
+        <span *ngIf='!isLoading()'>Start Dreaming</span>
+        <span *ngIf='isLoading()' class='loader'></span>
+      </button>
+
+      <app-auth-footer
+        text='Already a dreamer?'
+        linkText='Go to sleep'
+        linkRoute='/login'
+      ></app-auth-footer>
+    </form>
+  </div>
+</div>

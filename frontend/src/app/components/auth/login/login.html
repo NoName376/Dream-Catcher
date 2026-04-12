@@ -1,0 +1,34 @@
+<div class='auth-container'>
+  <div class='auth-card'>
+    <app-auth-header title='Dream Catcher' subtitle='Login to your dreams'></app-auth-header>
+    
+    <form [formGroup]='loginForm' (ngSubmit)='onSubmit()'>
+      <app-auth-field
+        id='email'
+        label='Email Address'
+        type='email'
+        placeholder='enter your email'
+        [control]='emailControl'
+      ></app-auth-field>
+
+      <app-auth-field
+        id='password'
+        label='Password'
+        type='password'
+        placeholder='••••••••'
+        [control]='passwordControl'
+      ></app-auth-field>
+
+      <button type='submit' [disabled]='loginForm.invalid || isLoading()' class='btn-primary'>
+        <span *ngIf='!isLoading()'>Wake Up</span>
+        <span *ngIf='isLoading()' class='loader'></span>
+      </button>
+
+      <app-auth-footer
+        text="Don't have an account?"
+        linkText='Commence dreaming'
+        linkRoute='/register'
+      ></app-auth-footer>
+    </form>
+  </div>
+</div>

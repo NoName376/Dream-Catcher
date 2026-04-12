@@ -1,0 +1,16 @@
+.auth-footer-content {
+  text-align: center;
+  margin-top: 24px;
+  color: rgba(168, 230, 207, 0.6);
+  font-size: 0.9rem;
+}
+
+a {
+  color: #a8e6cf;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}

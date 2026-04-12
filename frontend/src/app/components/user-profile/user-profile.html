@@ -1,0 +1,40 @@
+<div class='profile-container'>
+  <div class='profile-card'>
+    <h2>Your Identity</h2>
+    <p class='subtitle'>Refine how you manifest in the dreamscape</p>
+
+    <form [formGroup]='profileForm' (ngSubmit)='onSubmit()'>
+      <app-auth-field
+        id='username'
+        label='Username'
+        placeholder='choose a username'
+        [control]='usernameControl'
+      ></app-auth-field>
+
+      <div class='name-row'>
+        <app-auth-field
+          id='firstName'
+          label='First Name'
+          placeholder='your name'
+          [control]='firstNameControl'
+        ></app-auth-field>
+
+        <app-auth-field
+          id='lastName'
+          label='Last Name'
+          placeholder='your last name'
+          [control]='lastNameControl'
+        ></app-auth-field>
+      </div>
+
+      <button type='submit' [disabled]='profileForm.invalid || isUpdating()' class='btn-primary'>
+        <span *ngIf='!isUpdating()'>Update Essence</span>
+        <span *ngIf='isUpdating()' class='loader'></span>
+      </button>
+
+      <div *ngIf='updateSuccess()' class='success-toast'>
+        Essence drifted into the cloud successfully.
+      </div>
+    </form>
+  </div>
+</div>
