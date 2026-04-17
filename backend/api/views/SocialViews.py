@@ -22,6 +22,10 @@ class PostViewSet(viewsets.ModelViewSet):
         if is_bookmarks and self.request.user.is_authenticated:
             queryset = queryset.filter(saved_by__user=self.request.user)
 
+        author_id = self.request.query_params.get('author')
+        if author_id:
+            queryset = queryset.filter(author_id=author_id)
+
         # Sorting
         sort_by = self.request.query_params.get('sort', 'newest')
         if sort_by == 'popular':

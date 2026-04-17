@@ -24,12 +24,13 @@ export class PostService {
   public readonly hasMore = signal<boolean>(false);
   public readonly currentPage = signal<number>(1);
 
-  public getPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest'): Observable<PaginatedResponse<IPost>> {
+  public getPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest', authorId?: number): Observable<PaginatedResponse<IPost>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('sort', sort);
 
     if (bookmarks) params = params.set('bookmarks', 'true');
+    if (authorId) params = params.set('author', authorId.toString());
     hashtags.forEach(h => params = params.append('hashtags', h));
 
     return this._http.get<PaginatedResponse<IPost>>(`${this._apiUrl}/posts/`, { params }).pipe(

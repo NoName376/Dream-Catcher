@@ -18,13 +18,25 @@ export class AuthService {
 
   public register(data: any): Observable<IAuthResponse> {
     return this._http.post<IAuthResponse>(`${this._apiUrl}/register/`, data).pipe(
-      tap((res) => this._handleAuthSuccess(res))
+      tap((res) => {
+        this._handleAuthSuccess(res);
+        this.getProfile().subscribe();
+      })
     );
   }
 
   public login(data: any): Observable<IAuthResponse> {
     return this._http.post<IAuthResponse>(`${this._apiUrl}/login/`, data).pipe(
-      tap((res) => this._handleAuthSuccess(res))
+      tap((res) => {
+        this._handleAuthSuccess(res);
+        this.getProfile().subscribe();
+      })
+    );
+  }
+
+  public getProfile(): Observable<IUser> {
+    return this._http.get<IUser>(`${this._apiUrl}/profile/`).pipe(
+      tap((user) => this._currentUser.set(user))
     );
   }
 
@@ -53,5 +65,13 @@ export class AuthService {
     localStorage.setItem('access_token', response.access);
     localStorage.setItem('refresh_token', response.refresh);
     this._isAuthenticated.set(true);
+  }
+
+  constructor() {
+    if (this.isAuthenticated()) {
+      this.getProfile().subscribe({
+        error: () => this.logout()
+      });
+    }
   }
 }
