@@ -1,0 +1,17 @@
+<div class="trending-card">
+  <h3>Trending Dreams</h3>
+  <div class="hashtag-list">
+    <div 
+      *ngFor="let hashtag of hashtags()" 
+      class="hashtag-item"
+      (click)="onSelect(hashtag.name)"
+    >
+      <span class="hashtag-name">#{{ hashtag.name }}</span>
+      <span class="hashtag-count">{{ hashtag.usageCount }} dreams</span>
+    </div>
+  </div>
+  
+  <div *ngIf="!hashtags().length" class="empty-trending">
+    Exploring the collective unconscious...
+  </div>
+</div>

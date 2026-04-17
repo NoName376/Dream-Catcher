@@ -3,20 +3,24 @@
     [(ngModel)]='content'
     placeholder='Share your dream...'
     rows='3'
+    maxlength='5000'
     [disabled]='isSubmitting()'
   ></textarea>
 
   <div class='tag-selector-container'>
     <app-hashtag-selector (hashtagChanged)='onTagsChanged($event)'></app-hashtag-selector>
+    <div class='hashtag-warning' *ngIf='showHashtagWarning()'>
+      Please add at least one hashtag to help others find your dream.
+    </div>
   </div>
 
   <div class='footer'>
-    <span class='char-count' [class.limit]='content().length > 500'>
-      {{ content().length }}/500
+    <span class='char-count' [class.limit]='content().length > 5000'>
+      {{ content().length }}/5000
     </span>
     <button 
       class='btn-primary' 
-      [disabled]='!content().trim() || content().length > 500 || isSubmitting()'
+      [disabled]='!content().trim() || content().length > 5000 || isSubmitting()'
       (click)='onSubmit()'
     >
       <span *ngIf='!isSubmitting()'>Cast Dream</span>

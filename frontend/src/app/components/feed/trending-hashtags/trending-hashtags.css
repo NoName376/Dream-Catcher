@@ -1,0 +1,58 @@
+.trending-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 24px;
+  position: sticky;
+  top: 24px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.25rem;
+  color: #a8ffb5;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.hashtag-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hashtag-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.hashtag-item:hover {
+  background: rgba(168, 255, 181, 0.1);
+  transform: translateX(4px);
+}
+
+.hashtag-name {
+  color: #fff;
+  font-weight: 500;
+}
+
+.hashtag-count {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.empty-trending {
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  text-align: center;
+  padding: 20px 0;
+}
