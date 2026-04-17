@@ -1,0 +1,21 @@
+<div class="posts-list">
+  @for (post of posts(); track post.id) {
+    <app-post-card 
+      [post]="post"
+      (liked)="onPostAction()"
+      (bookmarked)="onPostAction()"
+    ></app-post-card>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-indicator">
+      <span class="sparkle">✨</span>Manifesting dreams...
+    </div>
+  }
+
+  @if (!posts().length && !isLoading()) {
+    <div class="empty-state">
+      No dreams here yet. Start dreaming!
+    </div>
+  }
+</div>

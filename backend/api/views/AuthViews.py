@@ -35,6 +35,10 @@ class LoginView(APIView):
 class UserUpdateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    def get(self, request):
+        serializer = UserUpdateSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def patch(self, request):
         serializer = UserUpdateSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
