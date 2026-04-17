@@ -45,4 +45,9 @@ export class HashtagSelector {
   public onEnter(): void {
     this.addHashtag(this.hashtagInput());
   }
+
+  public reset(): void {
+    this.selectedHashtags.set([]);
+    this.hashtagInput.set('');
+  }
 }

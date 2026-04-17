@@ -2,6 +2,7 @@ import { Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IPost } from '../../../interfaces/post';
 import { SocialService } from '../../../services/social/social';
+import { PostService } from '../../../services/post/post';
 
 @Component({
   selector: 'app-post-card',
@@ -11,21 +12,32 @@ import { SocialService } from '../../../services/social/social';
   styleUrl: './post-card.css'
 })
 export class PostCard {
+  private readonly _postService = inject(PostService);
   private readonly _socialService = inject(SocialService);
 
   public readonly post = input.required<IPost>();
-  public readonly liked = output<number>();
-  public readonly bookmarked = output<number>();
 
   public onLike(): void {
-    this._socialService.toggleLike(this.post().id).subscribe(() => {
-      this.liked.emit(this.post().id);
+    const p = this.post();
+    this._socialService.toggleLike(p.id).subscribe({
+      next: (resp: { status: string }) => {
+        const isLiked = resp.status === 'liked';
+        this._postService.patchPostState(p.id, {
+          isLiked: isLiked,
+          likesCount: isLiked ? p.likesCount + 1 : p.likesCount - 1
+        });
+      }
     });
   }
 
   public onBookmark(): void {
-    this._socialService.toggleBookmark(this.post().id).subscribe(() => {
-      this.bookmarked.emit(this.post().id);
+    const p = this.post();
+    this._socialService.toggleBookmark(p.id).subscribe({
+      next: (resp: { status: string }) => {
+        this._postService.patchPostState(p.id, {
+          isBookmarked: resp.status === 'saved'
+        });
+      }
     });
   }
 }
