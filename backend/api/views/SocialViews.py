@@ -13,7 +13,6 @@ class PostViewSet(viewsets.ModelViewSet):
         queryset = Post.objects.all().select_related('author').prefetch_related('hashtags', 'likes_received', 'saved_by')
         queryset = queryset.annotate(likes_count=Count('likes_received'))
         
-        # Filtering
         hashtag_names = self.request.query_params.getlist('hashtags')
         if hashtag_names:
             queryset = queryset.filter(hashtags__name__in=hashtag_names).distinct()
@@ -31,18 +30,11 @@ class PostViewSet(viewsets.ModelViewSet):
         if is_bookmarks and self.request.user.is_authenticated:
             queryset = queryset.filter(saved_by__user=self.request.user)
 
-        # Privacy Filter
-        # Exclude private users' posts from general feed
-        # But allow if viewing own profile or specific author (if logic allows)
-        # Actually, if author_id or author_username is provided, we assume the user wants to see specifically those.
-        # However, for general feed (no specific author), we must exclude is_private=True.
         if not (author_id or author_username or is_bookmarks):
             queryset = queryset.exclude(author__is_private=True)
         elif (author_id and author_id != str(self.request.user.id)) or (author_username and author_username != self.request.user.username):
-            # If viewing someone else's profile, also check privacy
             queryset = queryset.exclude(author__is_private=True)
 
-        # Sorting
         sort_by = self.request.query_params.get('sort', 'newest')
         if sort_by == 'popular':
             queryset = queryset.order_by('-likes_count', '-created_at')
@@ -51,16 +43,25 @@ class PostViewSet(viewsets.ModelViewSet):
             
         return queryset
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        fresh_serializer = self.get_serializer(serializer.instance)
+        return Response(fresh_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     def perform_create(self, serializer):
-        # Extract hashtag names from request
         hashtag_names = self.request.data.get('hashtag_names', [])
         post = serializer.save(author=self.request.user)
         
-        # Add hashtags (limit 7 is enforced on frontend, but good to handle here too)
+        added_hashtags = []
         for name in hashtag_names[:7]:
-            hashtag, created = Hashtag.objects.get_or_create(name=name.strip().lower())
+            hashtag, _ = Hashtag.objects.get_or_create(name=name.strip().lower())
             post.hashtags.add(hashtag)
-            # Update count correctly
+            added_hashtags.append(hashtag)
+        
+        for hashtag in added_hashtags:
             hashtag.usage_count = hashtag.posts.count()
             hashtag.save()
 

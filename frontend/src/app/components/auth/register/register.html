@@ -2,6 +2,9 @@
   <div class='auth-card'>
     <app-auth-header title='Join the Dream' subtitle='Create your identity in the dreamscape'></app-auth-header>
     
+    <div *ngIf='errorMessage()' class='error-message'>
+      {{ errorMessage() }}
+    </div>
     <form [formGroup]='registerForm' (ngSubmit)='onSubmit()'>
       <app-auth-field
         id='username'

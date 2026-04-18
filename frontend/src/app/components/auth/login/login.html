@@ -2,6 +2,9 @@
   <div class='auth-card'>
     <app-auth-header title='Dream Catcher' subtitle='Login to your dreams'></app-auth-header>
     
+    <div *ngIf='errorMessage()' class='error-message'>
+      {{ errorMessage() }}
+    </div>
     <form [formGroup]='loginForm' (ngSubmit)='onSubmit()'>
       <app-auth-field
         id='email'

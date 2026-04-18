@@ -11,11 +11,20 @@ class RegisterView(APIView):
     permission_classes = []
 
     def post(self, request):
-        user = AuthService.RegisterUser(request.data)
-        if user:
-            tokens = AuthService.GenerateTokens(user)
-            return Response(tokens, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = AuthService.RegisterUser(request.data)
+            if user:
+                tokens = AuthService.GenerateTokens(user)
+                return Response(tokens, status=status.HTTP_201_CREATED)
+            return Response({'error': 'Registration failed'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            error_data = getattr(e, 'detail', str(e))
+            if isinstance(error_data, dict):
+                if 'email' in error_data:
+                    return Response({'error': 'User with this email already exists'}, status=status.HTTP_400_BAD_REQUEST)
+                if 'username' in error_data:
+                    return Response({'error': 'User with this username already exists'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
     authentication_classes = []

@@ -45,8 +45,10 @@ export class Feed implements OnInit, AfterViewInit, OnDestroy {
     if (this.isLoading()) return;
     
     this.isLoading.set(true);
+    if (page === 1) this._postService.posts; // Trigger read if needed, but not necessary
+    
     const hashtags = this.searchQuery() 
-      ? this.searchQuery().split(' ').map(h => h.replace(/#/g, '')) 
+      ? this.searchQuery().split(' ').map(h => h.trim().replace(/#/g, '')).filter(h => h)
       : [];
     
     this._postService.getPosts(hashtags, false, page, this.sortMode()).subscribe({

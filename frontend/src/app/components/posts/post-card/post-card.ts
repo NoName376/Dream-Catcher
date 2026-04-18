@@ -23,8 +23,8 @@ export class PostCard {
       next: (resp: { status: string }) => {
         const isLiked = resp.status === 'liked';
         this._postService.patchPostState(p.id, {
-          isLiked: isLiked,
-          likesCount: isLiked ? p.likesCount + 1 : p.likesCount - 1
+          is_liked: isLiked,
+          likes_count: isLiked ? p.likes_count + 1 : p.likes_count - 1
         });
       }
     });
@@ -35,7 +35,7 @@ export class PostCard {
     this._socialService.toggleBookmark(p.id).subscribe({
       next: (resp: { status: string }) => {
         this._postService.patchPostState(p.id, {
-          isBookmarked: resp.status === 'saved'
+          is_bookmarked: resp.status === 'saved'
         });
       }
     });

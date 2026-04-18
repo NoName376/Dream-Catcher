@@ -2,6 +2,7 @@ import { Component, inject, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PostService } from '../../../services/post/post';
+import { NotificationService } from '../../../services/notification';
 import { HashtagSelector } from '../hashtag-selector/hashtag-selector';
 
 @Component({
@@ -13,6 +14,7 @@ import { HashtagSelector } from '../hashtag-selector/hashtag-selector';
 })
 export class PostCreate {
   private readonly _postService = inject(PostService);
+  private readonly _notifService = inject(NotificationService);
   @ViewChild(HashtagSelector) hashtagSelector?: HashtagSelector;
 
   public readonly content = signal<string>('');
@@ -41,8 +43,12 @@ export class PostCreate {
           this.hashtagSelector?.reset();
           this.selectedTags.set([]);
           this.isSubmitting.set(false);
+          this._notifService.show('Dream shared successfully! ✨');
         },
-        error: () => this.isSubmitting.set(false)
+        error: () => {
+          this.isSubmitting.set(false);
+          this._notifService.show('Failed to share dream. 🌌', 'error');
+        }
       });
     }
   }
