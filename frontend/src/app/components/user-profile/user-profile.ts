@@ -17,7 +17,7 @@ export class UserProfile {
   private readonly _postService = inject(PostService);
 
   public readonly user = this._authService.currentUser;
-  public readonly posts = signal<IPost[]>([]);
+  public readonly posts = this._postService.userPosts;
   public readonly isLoading = signal<boolean>(false);
 
   constructor() {
@@ -32,11 +32,8 @@ export class UserProfile {
     const currentUser = this.user();
     if (currentUser) {
       this.isLoading.set(true);
-      this._postService.getPosts([], false, 1, 'newest', currentUser.id).subscribe({
-        next: (response) => {
-          this.posts.set(response.results);
-          this.isLoading.set(false);
-        },
+      this._postService.loadUserPosts(currentUser.username).subscribe({
+        next: () => this.isLoading.set(false),
         error: () => this.isLoading.set(false)
       });
     }

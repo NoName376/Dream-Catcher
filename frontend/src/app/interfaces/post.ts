@@ -1,11 +1,12 @@
 export interface IPost {
   id: number;
   author: number;
-  authorUsername: string;
+  author_username: string;
+  author_is_private: boolean;
   content: string;
-  hashtagNames: string[];
-  createdAt: string;
-  isLiked: boolean;
-  isBookmarked: boolean;
-  likesCount: number;
+  hashtag_names: string[];
+  created_at: string;
+  is_liked: boolean;
+  is_bookmarked: boolean;
+  likes_count: number;
 }
