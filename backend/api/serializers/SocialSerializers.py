@@ -11,16 +11,15 @@ class PostSerializer(serializers.ModelSerializer):
     author_is_private = serializers.ReadOnlyField(source='author.is_private')
     hashtag_names = serializers.SlugRelatedField(
         many=True,
+        read_only=True,
         slug_field='name',
-        queryset=Hashtag.objects.all(),
-        source='hashtags',
-        required=False
+        source='hashtags'
     )
     is_liked = serializers.SerializerMethodField()
     is_bookmarked = serializers.SerializerMethodField()
     likes_count = serializers.IntegerField(source='likes_received.count', read_only=True)
 
-    content = serializers.CharField(max_length=3000)
+    content = serializers.CharField(max_length=5000)
 
     class Meta:
         model = Post

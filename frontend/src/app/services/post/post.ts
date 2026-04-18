@@ -16,6 +16,7 @@ interface IBackendPost {
   id: number;
   author: number;
   author_username: string;
+  author_is_private: boolean;
   content: string;
   hashtag_names?: string[];
   hashtags?: { id: number; name: string }[];
@@ -62,34 +63,29 @@ export class PostService {
   }
 
   public getPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest', authorId?: number): Observable<PaginatedResponse<IPost>> {
-    const currentUser = this._authService.currentUser();
-    
     return this._fetchPosts(hashtags, bookmarks, page, sort, authorId).pipe(
+      map(response => ({
+        ...response,
+        results: response.results.map(p => this._mapPost(p as any))
+      })),
       tap(response => {
-        // Frontend filtering as requested
-        const filteredResults = response.results.filter(post => {
-          if (!post.author_is_private) return true;
-          return post.author === currentUser?.id;
-        });
-
         if (page === 1) {
-          this._posts.set(filteredResults);
+          this._posts.set(response.results);
         } else {
-          this._posts.update(p => [...p, ...filteredResults]);
+          this._posts.update(p => [...p, ...response.results]);
         }
         this.hasMore.set(!!response.next);
         this.currentPage.set(page);
-        
-        return {
-          ...response,
-          results: mappedResults
-        } as PaginatedResponse<IPost>;
       })
     );
   }
 
   public loadUserPosts(username: string, page = 1): Observable<PaginatedResponse<IPost>> {
     return this._fetchPosts([], false, page, 'newest', undefined, username).pipe(
+      map(response => ({
+        ...response,
+        results: response.results.map(p => this._mapPost(p as any))
+      })),
       tap(response => {
         if (page === 1) {
           this._userPosts.set(response.results);
@@ -106,33 +102,33 @@ export class PostService {
 
   public createPost(content: string, hashtag_names: string[]): Observable<IPost> {
     return this._http.post<IPost>(`${this._apiUrl}/posts/`, { content, hashtag_names }).pipe(
+      map(p => this._mapPost(p as any)),
       tap(newPost => {
-        // Prepend new post to the top immediately
         this._posts.update(p => [newPost, ...p]);
       })
     );
   }
 
   public patchPostState(postId: number, updates: Partial<IPost>): void {
-    this._posts.update(posts => 
-      posts.map(p => p.id === postId ? { ...p, ...updates } : p)
-    );
+    const updateFn = (posts: IPost[]) => posts.map(p => p.id === postId ? { ...p, ...updates } : p);
+    this._posts.update(updateFn);
+    this._userPosts.update(updateFn);
   }
 
   private _mapPost(p: IBackendPost): IPost {
-    // Attempt to extract hashtags from both potential formats
     const hashtags = p.hashtag_names || (p.hashtags ? p.hashtags.map(h => h.name) : []);
 
     return {
       id: p.id,
       author: p.author,
-      authorUsername: p.author_username || 'Anonymous',
+      author_username: p.author_username || 'Anonymous',
+      author_is_private: !!p.author_is_private, 
       content: p.content || '',
-      hashtagNames: hashtags,
-      createdAt: p.created_at,
-      isLiked: !!p.is_liked,
-      isBookmarked: !!p.is_bookmarked,
-      likesCount: p.likes_count || 0
+      hashtag_names: hashtags,
+      created_at: p.created_at,
+      is_liked: !!p.is_liked,
+      is_bookmarked: !!p.is_bookmarked,
+      likes_count: p.likes_count || 0
     };
   }
 

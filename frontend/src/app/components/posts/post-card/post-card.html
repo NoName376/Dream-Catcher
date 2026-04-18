@@ -3,24 +3,21 @@
     <div class='author-info'>
       <div class='meta'>
         <span class='username'>@{{ post().author_username }}</span>
-        <span class='date'>{{ post().created_at | date:'short' }}</span>
+        <span class='timestamp'>{{ post().created_at | date:'short' }}</span>
       </div>
     </div>
-    <button class="bookmark-btn" [class.active]="post().isBookmarked" (click)="onBookmark()">
-      <span class="icon">{{ post().isBookmarked ? '🔖' : '📑' }}</span>
-    </button>
   </div>
 
   <div class="post-content">
     <p>{{ post().content }}</p>
     <div class='hashtags' *ngIf='post().hashtag_names.length'>
-      <span *ngFor='let tag of post().hashtag_names' class='hashtag'>#{{ tag }}</span>
+      <span *ngFor='let tag of post().hashtag_names' class='tag'>#{{ tag }}</span>
     </div>
   </div>
 
-  <div class='post-actions'>
+  <div class='post-footer'>
     <button 
-      class='action-btn like' 
+      class='interaction-btn like' 
       [class.active]='post().is_liked'
       (click)='onLike()'
     >
@@ -29,7 +26,7 @@
     </button>
 
     <button 
-      class='action-btn bookmark' 
+      class='interaction-btn bookmark' 
       [class.active]='post().is_bookmarked'
       (click)='onBookmark()'
     >

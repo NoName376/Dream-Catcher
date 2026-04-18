@@ -1,6 +1,7 @@
 <div class='post-create-card'>
   <textarea
-    [(ngModel)]='content'
+    [ngModel]='content()'
+    (ngModelChange)='content.set($event)'
     placeholder='Share your dream...'
     rows='3'
     maxlength='5000'
@@ -15,12 +16,12 @@
   </div>
 
   <div class='footer'>
-    <span class='char-count' [class.limit]='content().length > 3000'>
-      {{ content().length }}/3000
+    <span class='char-count' [class.limit]='content().length > 5000'>
+      {{ content().length }}/5000
     </span>
     <button 
       class='btn-primary' 
-      [disabled]='!content().trim() || content().length > 3000 || isSubmitting()'
+      [disabled]='!content().trim() || content().length > 5000 || isSubmitting()'
       (click)='onSubmit()'
     >
       <span *ngIf='!isSubmitting()'>Cast Dream</span>

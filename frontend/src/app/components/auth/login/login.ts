@@ -20,6 +20,7 @@ export class Login {
   private readonly _router = inject(Router);
 
   public readonly isLoading = signal<boolean>(false);
+  public readonly errorMessage = signal<string | null>(null);
 
   public readonly loginForm = this._fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -37,9 +38,13 @@ export class Login {
   public onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading.set(true);
+      this.errorMessage.set(null);
       this._authService.login(this.loginForm.value).subscribe({
         next: () => this._router.navigate(['/feed']),
-        error: () => this.isLoading.set(false)
+        error: (err) => {
+          this.isLoading.set(false);
+          this.errorMessage.set(err.error?.error || 'Login failed. Please check your credentials.');
+        }
       });
     }
   }

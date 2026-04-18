@@ -20,6 +20,7 @@ export class Register {
   private readonly _router = inject(Router);
 
   public readonly isLoading = signal<boolean>(false);
+  public readonly errorMessage = signal<string | null>(null);
 
   public readonly registerForm = this._fb.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
@@ -42,10 +43,14 @@ export class Register {
   public onSubmit(): void {
     if (this.registerForm.valid) {
       this.isLoading.set(true);
+      this.errorMessage.set(null);
       const { username, email, password } = this.registerForm.value;
       this._authService.register({ username, email, password }).subscribe({
         next: () => this._router.navigate(['/feed']),
-        error: () => this.isLoading.set(false)
+        error: (err) => {
+          this.isLoading.set(false);
+          this.errorMessage.set(err.error?.error || 'Registration failed. Please try again.');
+        }
       });
     }
   }

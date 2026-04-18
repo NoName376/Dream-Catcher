@@ -7,7 +7,8 @@
           <div class="search-box">
             <input 
               type="text" 
-              [(ngModel)]="searchQuery" 
+              [ngModel]="searchQuery()" 
+              (ngModelChange)="searchQuery.set($event)"
               (keyup.enter)="onSearch()"
               placeholder="Search collective dreams..."
             />
