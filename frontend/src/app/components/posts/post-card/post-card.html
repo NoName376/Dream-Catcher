@@ -6,9 +6,12 @@
         <span class='date'>{{ post().created_at | date:'short' }}</span>
       </div>
     </div>
+    <button class="bookmark-btn" [class.active]="post().isBookmarked" (click)="onBookmark()">
+      <span class="icon">{{ post().isBookmarked ? '🔖' : '📑' }}</span>
+    </button>
   </div>
 
-  <div class='post-content'>
+  <div class="post-content">
     <p>{{ post().content }}</p>
     <div class='hashtags' *ngIf='post().hashtag_names.length'>
       <span *ngFor='let tag of post().hashtag_names' class='hashtag'>#{{ tag }}</span>

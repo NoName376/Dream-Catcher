@@ -3,11 +3,15 @@
     [(ngModel)]='content'
     placeholder='Share your dream...'
     rows='3'
+    maxlength='5000'
     [disabled]='isSubmitting()'
   ></textarea>
 
   <div class='tag-selector-container'>
     <app-hashtag-selector (hashtagChanged)='onTagsChanged($event)'></app-hashtag-selector>
+    <div class='hashtag-warning' *ngIf='showHashtagWarning()'>
+      Please add at least one hashtag to help others find your dream.
+    </div>
   </div>
 
   <div class='footer'>

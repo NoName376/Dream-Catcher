@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { PostService } from '../../services/post/post';
 import { PostCreate } from '../posts/post-create/post-create';
 import { PostCard } from '../posts/post-card/post-card';
+import { TrendingHashtags } from './trending-hashtags/trending-hashtags';
 
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [CommonModule, FormsModule, PostCreate, PostCard],
+  imports: [CommonModule, FormsModule, PostCreate, PostCard, TrendingHashtags],
   templateUrl: './feed.html',
   styleUrl: './feed.css'
 })
@@ -60,6 +61,11 @@ export class Feed implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public onSearch(): void {
+    this.initialLoad();
+  }
+
+  public onHashtagSelect(name: string): void {
+    this.searchQuery.set(name);
     this.initialLoad();
   }
 
