@@ -18,13 +18,29 @@ class PostViewSet(viewsets.ModelViewSet):
         if hashtag_names:
             queryset = queryset.filter(hashtags__name__in=hashtag_names).distinct()
         
+        author_id = self.request.query_params.get('author')
+        author_username = self.request.query_params.get('author_username')
         is_bookmarks = self.request.query_params.get('bookmarks') == 'true'
+
+        if author_id:
+            queryset = queryset.filter(author_id=author_id)
+
+        if author_username:
+            queryset = queryset.filter(author__username=author_username)
+            
         if is_bookmarks and self.request.user.is_authenticated:
             queryset = queryset.filter(saved_by__user=self.request.user)
 
-        author_id = self.request.query_params.get('author')
-        if author_id:
-            queryset = queryset.filter(author_id=author_id)
+        # Privacy Filter
+        # Exclude private users' posts from general feed
+        # But allow if viewing own profile or specific author (if logic allows)
+        # Actually, if author_id or author_username is provided, we assume the user wants to see specifically those.
+        # However, for general feed (no specific author), we must exclude is_private=True.
+        if not (author_id or author_username or is_bookmarks):
+            queryset = queryset.exclude(author__is_private=True)
+        elif (author_id and author_id != str(self.request.user.id)) or (author_username and author_username != self.request.user.username):
+            # If viewing someone else's profile, also check privacy
+            queryset = queryset.exclude(author__is_private=True)
 
         # Sorting
         sort_by = self.request.query_params.get('sort', 'newest')

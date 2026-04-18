@@ -3,8 +3,11 @@ from django.contrib.auth.models import AbstractUser
 from api.managers.UserManager import CustomUserManager
 
 class CustomUser(AbstractUser):
+    first_name = None
+    last_name = None
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=150, unique=True)
+    is_private = models.BooleanField(default=False)
     
     objects = CustomUserManager()
 

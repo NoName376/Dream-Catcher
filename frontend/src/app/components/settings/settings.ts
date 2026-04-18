@@ -1,13 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../services/auth/auth';
-import { UserService } from '../../../services/user/user';
-import { PasswordChange } from '../password-change/password-change';
+import { AuthService } from '../../services/auth/auth';
+import { UserService } from '../../services/user/user';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, PasswordChange],
+  imports: [CommonModule],
   templateUrl: './settings.html',
   styleUrl: './settings.css'
 })

@@ -1,37 +1,36 @@
 <article class='post-card'>
   <div class='post-header'>
     <div class='author-info'>
-      <div class='avatar'>{{ post().authorUsername[0].toUpperCase() }}</div>
       <div class='meta'>
-        <span class='username'>@{{ post().authorUsername }}</span>
-        <span class='date'>{{ post().createdAt | date:'short' }}</span>
+        <span class='username'>@{{ post().author_username }}</span>
+        <span class='date'>{{ post().created_at | date:'short' }}</span>
       </div>
     </div>
   </div>
 
   <div class='post-content'>
     <p>{{ post().content }}</p>
-    <div class='hashtags' *ngIf='post().hashtagNames.length'>
-      <span *ngFor='let tag of post().hashtagNames' class='hashtag'>#{{ tag }}</span>
+    <div class='hashtags' *ngIf='post().hashtag_names.length'>
+      <span *ngFor='let tag of post().hashtag_names' class='hashtag'>#{{ tag }}</span>
     </div>
   </div>
 
   <div class='post-actions'>
     <button 
       class='action-btn like' 
-      [class.active]='post().isLiked'
+      [class.active]='post().is_liked'
       (click)='onLike()'
     >
-      <span class='icon'>{{ post().isLiked ? '💖' : '🤍' }}</span>
-      <span class='count'>{{ post().likesCount }}</span>
+      <span class='icon'>{{ post().is_liked ? '💖' : '🤍' }}</span>
+      <span class='count'>{{ post().likes_count }}</span>
     </button>
 
     <button 
       class='action-btn bookmark' 
-      [class.active]='post().isBookmarked'
+      [class.active]='post().is_bookmarked'
       (click)='onBookmark()'
     >
-      <span class='icon'>{{ post().isBookmarked ? '🔖' : '📑' }}</span>
+      <span class='icon'>{{ post().is_bookmarked ? '🔖' : '📑' }}</span>
     </button>
   </div>
 </article>

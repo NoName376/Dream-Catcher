@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from api.services.AuthService import AuthService
 from api.serializers.AuthSerializers import LoginSerializer
-from api.serializers.SocialSerializers import UserUpdateSerializer, PasswordChangeSerializer
+from api.serializers.SocialSerializers import UserUpdateSerializer, PasswordChangeSerializer, PasswordUpdateSerializer
 from rest_framework import permissions
 
 class RegisterView(APIView):
@@ -56,6 +56,15 @@ class PasswordChangeView(APIView):
             if not user.check_password(serializer.validated_data['old_password']):
                 return Response({'error': 'Old password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
             user.set_password(serializer.validated_data['new_password'])
+            user.save()
+            return Response({'status': 'Password updated successfully'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request):
+        serializer = PasswordUpdateSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user = request.user
+            user.set_password(serializer.validated_data['password'])
             user.save()
             return Response({'status': 'Password updated successfully'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

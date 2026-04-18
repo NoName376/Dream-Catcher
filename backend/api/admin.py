@@ -7,6 +7,21 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('email', 'username', 'is_staff', 'is_active')
     search_fields = ('email', 'username')
     ordering = ('email',)
+    
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        ('Personal Info', {'fields': ('email',)}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        ('Privacy', {'fields': ('is_private',)}),
+    )
+    
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'username', 'password'),
+        }),
+    )
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):

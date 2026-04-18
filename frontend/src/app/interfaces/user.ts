@@ -2,8 +2,7 @@ export interface IUser {
   id: number;
   email: string;
   username: string;
-  firstName?: string;
-  lastName?: string;
+  is_private: boolean;
 }
 
 export interface IAuthResponse {
