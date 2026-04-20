@@ -1,0 +1,24 @@
+.save-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+}
+
+.save-btn:hover {
+  background: rgba(255, 215, 0, 0.1);
+  color: #ffd700;
+  transform: scale(1.05);
+}
+
+.save-btn.active {
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.12);
+}

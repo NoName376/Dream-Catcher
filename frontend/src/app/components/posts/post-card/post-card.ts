@@ -1,43 +1,32 @@
-import { Component, inject, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, input, signal } from '@angular/core';
 import { IPost } from '../../../interfaces/post';
-import { SocialService } from '../../../services/social/social';
 import { PostService } from '../../../services/post/post';
+import { PostModal } from '../post-modal/post-modal';
+import { LikeButton } from '../../shared/ui/like-button/like-button';
+import { SaveButton } from '../../shared/ui/save-button/save-button';
 
 @Component({
   selector: 'app-post-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [PostModal, LikeButton, SaveButton],
   templateUrl: './post-card.html',
   styleUrl: './post-card.css'
 })
 export class PostCard {
   private readonly _postService = inject(PostService);
-  private readonly _socialService = inject(SocialService);
 
   public readonly post = input.required<IPost>();
+  public readonly isModalOpen = signal(false);
 
-  public onLike(): void {
-    const p = this.post();
-    this._socialService.toggleLike(p.id).subscribe({
-      next: (resp: { status: string }) => {
-        const isLiked = resp.status === 'liked';
-        this._postService.patchPostState(p.id, {
-          is_liked: isLiked,
-          likes_count: isLiked ? p.likes_count + 1 : p.likes_count - 1
-        });
-      }
-    });
+  public livePost(): IPost {
+    return this._postService.posts().find(p => p.id === this.post().id) ?? this.post();
   }
 
-  public onBookmark(): void {
-    const p = this.post();
-    this._socialService.toggleBookmark(p.id).subscribe({
-      next: (resp: { status: string }) => {
-        this._postService.patchPostState(p.id, {
-          is_bookmarked: resp.status === 'saved'
-        });
-      }
-    });
+  public openModal(): void {
+    this.isModalOpen.set(true);
+  }
+
+  public closeModal(): void {
+    this.isModalOpen.set(false);
   }
 }

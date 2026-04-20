@@ -1,4 +1,14 @@
 <div class='post-create-card'>
+  <input
+    type="text"
+    [ngModel]="title()"
+    (ngModelChange)="title.set($event)"
+    placeholder="Dream title..."
+    maxlength="120"
+    [disabled]="isSubmitting()"
+    class="title-input"
+  />
+
   <textarea
     [ngModel]='content()'
     (ngModelChange)='content.set($event)'

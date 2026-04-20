@@ -1,0 +1,8 @@
+<button
+  class="save-btn"
+  [class.active]="post().is_bookmarked"
+  (click)="toggle()"
+  [attr.aria-label]="post().is_bookmarked ? 'Удалить из сохранённых' : 'Сохранить сон'"
+>
+  <span class="icon">{{ post().is_bookmarked ? '🔖' : '📑' }}</span>
+</button>
