@@ -11,11 +11,16 @@ A modern social network designed to capture and share dreams. Built with Angular
 - **User Profiles**: View personal dreams and manage settings.
 - **Secure Authentication**: JWT-based session management with persistent login.
 
-## Architecture
-
-The project is divided into two main parts:
-- `frontend/`: Angular 17+ application using Signals for state management and `inject()` for dependency injection.
 - `backend/`: Django application providing a REST API via Django REST Framework.
+
+## Full Documentation
+
+For detailed technical information, please refer to the following documents:
+
+- [**Frontend Architecture**](docs/frontend.md) - Components, state management, and styling.
+- [**Backend Architecture**](docs/backend.md) - Models, security, and project structure.
+- [**API Documentation**](docs/api.md) - Endpoints, authentication, and data structures.
+
 
 ### Frontend Technical Stack
 - **Framework**: Angular 17+ (Standalone Components)

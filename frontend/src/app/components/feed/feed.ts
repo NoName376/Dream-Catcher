@@ -5,11 +5,12 @@ import { PostService } from '../../services/post/post';
 import { PostCreate } from '../posts/post-create/post-create';
 import { PostCard } from '../posts/post-card/post-card';
 import { TrendingHashtags } from './trending-hashtags/trending-hashtags';
+import { DreamFacts } from '../shared/dream-facts/dream-facts';
 
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [CommonModule, FormsModule, PostCreate, PostCard, TrendingHashtags],
+  imports: [CommonModule, FormsModule, PostCreate, PostCard, TrendingHashtags, DreamFacts],
   templateUrl: './feed.html',
   styleUrl: './feed.css'
 })

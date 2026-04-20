@@ -1,0 +1,12 @@
+<div class="dream-facts-container">
+  <h4><span>🧠</span> Lucid Insights</h4>
+  
+  <div class="facts-list">
+    @for (fact of facts(); track fact.id) {
+      <div class="fact-item">
+        <span class="label">{{ fact.category }}</span>
+        <p>{{ fact.text }}</p>
+      </div>
+    }
+  </div>
+</div>
