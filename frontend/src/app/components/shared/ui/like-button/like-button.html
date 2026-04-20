@@ -1,0 +1,9 @@
+<button
+  class="like-btn"
+  [class.active]="post().is_liked"
+  (click)="toggle()"
+  [attr.aria-label]="post().is_liked ? 'Убрать лайк' : 'Лайкнуть'"
+>
+  <span class="icon">{{ post().is_liked ? '💖' : '🤍' }}</span>
+  <span class="count">{{ post().likes_count }}</span>
+</button>

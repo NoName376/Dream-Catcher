@@ -17,6 +17,7 @@ interface IBackendPost {
   author: number;
   author_username: string;
   author_is_private: boolean;
+  title: string;
   content: string;
   hashtag_names?: string[];
   hashtags?: { id: number; name: string }[];
@@ -100,8 +101,8 @@ export class PostService {
     return this.loadUserPosts(username, page);
   }
 
-  public createPost(content: string, hashtag_names: string[]): Observable<IPost> {
-    return this._http.post<IPost>(`${this._apiUrl}/posts/`, { content, hashtag_names }).pipe(
+  public createPost(title: string, content: string, hashtag_names: string[]): Observable<IPost> {
+    return this._http.post<IPost>(`${this._apiUrl}/posts/`, { title, content, hashtag_names }).pipe(
       map(p => this._mapPost(p as any)),
       tap(newPost => {
         this._posts.update(p => [newPost, ...p]);
@@ -123,6 +124,7 @@ export class PostService {
       author: p.author,
       author_username: p.author_username || 'Anonymous',
       author_is_private: !!p.author_is_private, 
+      title: p.title || '',
       content: p.content || '',
       hashtag_names: hashtags,
       created_at: p.created_at,

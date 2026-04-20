@@ -1,36 +1,31 @@
-<article class='post-card'>
-  <div class='post-header'>
-    <div class='author-info'>
-      <div class='meta'>
-        <span class='username'>@{{ post().author_username }}</span>
-        <span class='timestamp'>{{ post().created_at | date:'short' }}</span>
+<article class="post-card">
+  <div class="post-card-inner">
+    <div class="card-top">
+      <h3 class="dream-title">{{ post().title || 'Untitled Dream' }}</h3>
+      <span class="author">@{{ post().author_username }}</span>
+
+      @if (post().hashtag_names.length) {
+        <div class="hashtags">
+          @for (tag of post().hashtag_names; track tag) {
+            <span class="tag">#{{ tag }}</span>
+          }
+        </div>
+      }
+
+      <p class="dream-text">{{ post().content }}</p>
+    </div>
+
+    <div class="card-bottom">
+      <button class="read-more-btn" (click)="openModal()">Читать полностью</button>
+
+      <div class="actions">
+        <app-like-button [post]="livePost()" />
+        <app-save-button [post]="livePost()" />
       </div>
     </div>
   </div>
-
-  <div class="post-content">
-    <p>{{ post().content }}</p>
-    <div class='hashtags' *ngIf='post().hashtag_names.length'>
-      <span *ngFor='let tag of post().hashtag_names' class='tag'>#{{ tag }}</span>
-    </div>
-  </div>
-
-  <div class='post-footer'>
-    <button 
-      class='interaction-btn like' 
-      [class.active]='post().is_liked'
-      (click)='onLike()'
-    >
-      <span class='icon'>{{ post().is_liked ? '💖' : '🤍' }}</span>
-      <span class='count'>{{ post().likes_count }}</span>
-    </button>
-
-    <button 
-      class='interaction-btn bookmark' 
-      [class.active]='post().is_bookmarked'
-      (click)='onBookmark()'
-    >
-      <span class='icon'>{{ post().is_bookmarked ? '🔖' : '📑' }}</span>
-    </button>
-  </div>
 </article>
+
+@if (isModalOpen()) {
+  <app-post-modal [post]="livePost()" (closed)="closeModal()" />
+}

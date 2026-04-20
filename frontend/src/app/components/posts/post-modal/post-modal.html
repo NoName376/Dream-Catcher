@@ -1,0 +1,31 @@
+<dialog #dialog class="dream-dialog" (click)="onBackdropClick($event)">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title-block">
+        <h2 class="modal-title">{{ post().title || 'Untitled Dream' }}</h2>
+        <span class="modal-author">@{{ post().author_username }}</span>
+      </div>
+      <button class="close-btn" (click)="close()">✕</button>
+    </div>
+
+    @if (post().hashtag_names.length) {
+      <div class="modal-hashtags">
+        @for (tag of post().hashtag_names; track tag) {
+          <span class="tag">#{{ tag }}</span>
+        }
+      </div>
+    }
+
+    <div class="modal-body">
+      <p>{{ post().content }}</p>
+    </div>
+
+    <div class="modal-footer">
+      <div class="modal-actions">
+        <app-like-button [post]="post()" />
+        <app-save-button [post]="post()" />
+      </div>
+      <span class="modal-date">{{ post().created_at | date:'medium' }}</span>
+    </div>
+  </div>
+</dialog>

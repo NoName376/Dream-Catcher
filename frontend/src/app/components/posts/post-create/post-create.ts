@@ -17,6 +17,7 @@ export class PostCreate {
   private readonly _notifService = inject(NotificationService);
   @ViewChild(HashtagSelector) hashtagSelector?: HashtagSelector;
 
+  public readonly title = signal<string>('');
   public readonly content = signal<string>('');
   public readonly selectedTags = signal<string[]>([]);
   public readonly isSubmitting = signal<boolean>(false);
@@ -35,10 +36,11 @@ export class PostCreate {
       return;
     }
 
-    if (this.content().trim()) {
+    if (this.title().trim() && this.content().trim()) {
       this.isSubmitting.set(true);
-      this._postService.createPost(this.content(), this.selectedTags()).subscribe({
+      this._postService.createPost(this.title(), this.content(), this.selectedTags()).subscribe({
         next: () => {
+          this.title.set('');
           this.content.set('');
           this.hashtagSelector?.reset();
           this.selectedTags.set([]);

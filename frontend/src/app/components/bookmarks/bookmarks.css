@@ -1,6 +1,6 @@
 .bookmarks-page {
-  padding: 40px 0;
-  max-width: 600px;
+  padding: 40px 24px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -10,19 +10,23 @@
 }
 
 h1 {
-  color: #a8e6cf;
-  font-size: 2.2rem;
-  font-weight: 700;
+  background: linear-gradient(135deg, #fff 0%, #a8ffb5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2.5rem;
+  font-weight: 800;
   margin-bottom: 8px;
 }
 
 .page-header p {
-  color: rgba(168, 230, 207, 0.4);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .bookmarks-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  align-items: start;
 }
 
 .empty-state {

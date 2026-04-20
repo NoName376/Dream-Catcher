@@ -26,6 +26,7 @@ class Hashtag(models.Model):
 
 class Post(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts')
+    title = models.CharField(max_length=120, default='')
     content = models.TextField()
     hashtags = models.ManyToManyField(Hashtag, related_name='posts', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

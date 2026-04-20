@@ -3,6 +3,7 @@ export interface IPost {
   author: number;
   author_username: string;
   author_is_private: boolean;
+  title: string;
   content: string;
   hashtag_names: string[];
   created_at: string;
