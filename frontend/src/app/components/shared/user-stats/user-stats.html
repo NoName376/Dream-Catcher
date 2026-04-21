@@ -1,0 +1,39 @@
+<div class="stats-container">
+  @if (loading()) {
+    <div class="skeleton-block">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+    </div>
+  } @else if (stats()) {
+    <div class="stats-section">
+      <h3>Top Categories</h3>
+      <div class="stats-list">
+        @for (cat of stats().top_categories; track cat.category) {
+          <div class="stats-item">
+            <span class="label">{{ getCategoryName(cat.category) }}</span>
+            <span class="count">{{ cat.count }}</span>
+          </div>
+        }
+        @if (stats().top_categories.length === 0) {
+          <p class="empty-hint">No dreams yet</p>
+        }
+      </div>
+    </div>
+
+    <div class="stats-section">
+      <h3>Popular Tags</h3>
+      <div class="hashtag-cloud">
+        @for (tag of stats().top_hashtags; track tag.name) {
+          <button class="tag-pill" (click)="onHashtagClick(tag.name)">
+            #{{ tag.name }} <span>{{ tag.count }}</span>
+          </button>
+        }
+        @if (stats().top_hashtags.length === 0) {
+          <p class="empty-hint">No hashtags yet</p>
+        }
+      </div>
+    </div>
+  }
+</div>

@@ -35,6 +35,89 @@
   min-height: 0;
 }
 
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.title-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.options-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.options-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1.4rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.options-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.options-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 6px;
+  z-index: 100;
+  min-width: 160px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  animation: menuIn 0.2s ease;
+}
+
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.menu-item {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.menu-item.delete {
+  color: #ff6b6b;
+}
+
+.menu-item.delete:hover {
+  background: rgba(255, 107, 107, 0.1);
+}
+
 .dream-title {
   font-size: 1.05rem;
   font-weight: 700;
@@ -116,34 +199,44 @@
   gap: 4px;
 }
 
-.interaction-btn {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.55);
+.user-meta {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.85rem;
-  font-weight: 500;
+  gap: 8px;
+  margin-bottom: 4px;
 }
 
-.interaction-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+.category-badge {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
 }
 
-.interaction-btn.like.active {
-  color: #ff6b6b;
+.post-card.deleted {
+  animation: fadeOutDown 0.5s forwards cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
 }
 
-.interaction-btn.bookmark.active {
-  color: #ffd700;
-}
-
-.interaction-btn .count {
-  font-variant-numeric: tabular-nums;
+@keyframes fadeOutDown {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    max-height: 500px;
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+    max-height: 0;
+    margin: 0;
+    padding: 0;
+  }
 }

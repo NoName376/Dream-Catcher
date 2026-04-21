@@ -98,3 +98,39 @@ textarea::placeholder {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.category-selector {
+  margin-bottom: 1.5rem;
+}
+
+.category-selector select {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  padding-right: 2.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.category-selector select:focus {
+  outline: none;
+  border-color: #a8e6cf;
+  background-color: rgba(168, 230, 207, 0.05);
+  box-shadow: 0 0 15px rgba(168, 230, 207, 0.1);
+}
+
+.category-selector select option {
+  background: #1a1a1a;
+  color: #fff;
+}

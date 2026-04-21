@@ -1,3 +1,5 @@
+export type PostCategory = 'ordinary' | 'nightmare' | 'anxiety' | 'erotic' | 'archetypal';
+
 export interface IPost {
   id: number;
   author: number;
@@ -5,6 +7,7 @@ export interface IPost {
   author_is_private: boolean;
   title: string;
   content: string;
+  category: PostCategory;
   hashtag_names: string[];
   created_at: string;
   is_liked: boolean;

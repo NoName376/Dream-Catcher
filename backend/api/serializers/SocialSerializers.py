@@ -24,7 +24,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = [
-            'id', 'author', 'author_username', 'author_is_private', 'title', 'content', 
+            'id', 'author', 'author_username', 'author_is_private', 'title', 'content', 'category',
             'hashtag_names', 'created_at', 'is_liked', 
             'is_bookmarked', 'likes_count'
         ]
@@ -45,7 +45,8 @@ class PostSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['username', 'is_private']
+        fields = ['id', 'email', 'username', 'is_private']
+        read_only_fields = ['id', 'email']
 
 class PasswordChangeSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
