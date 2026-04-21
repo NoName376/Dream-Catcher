@@ -4,30 +4,17 @@
     <span class='logo-text'>Dream Catcher</span>
   </div>
 
-  <div class="sidebar-content">
-    <nav class='nav-menu'>
-      <a *ngFor='let item of menuItems' [routerLink]='item.route' routerLinkActive='active' class='nav-item'>
-        <span class='icon'>{{ item.icon }}</span>
-        <span class='label'>{{ item.label }}</span>
-      </a>
-    </nav>
-
-    <div class="sidebar-section genres-section">
-      <h4 class="section-title">Genres</h4>
-      <nav class="nav-menu">
-        <a [routerLink]="['/feed']" [queryParams]="{genre: null}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-          class="nav-item genre-item">
-          <span class="icon">🌌</span>
-          <span class="label">All Dreams</span>
-        </a>
-        <a *ngFor="let genre of genres" [routerLink]="['/feed']" [queryParams]="{genre: genre.id}" routerLinkActive="active"
-          class="nav-item genre-item">
-          <span class="icon">{{ genre.icon }}</span>
-          <span class="label">{{ genre.label }}</span>
-        </a>
-      </nav>
-    </div>
-  </div>
+  <nav class='nav-menu'>
+    <a 
+      *ngFor='let item of menuItems' 
+      [routerLink]='item.route' 
+      routerLinkActive='active'
+      class='nav-item'
+    >
+      <span class='icon'>{{ item.icon }}</span>
+      <span class='label'>{{ item.label }}</span>
+    </a>
+  </nav>
 
   <div class='sidebar-footer'>
     <button class='logout-btn' (click)='onLogout()'>

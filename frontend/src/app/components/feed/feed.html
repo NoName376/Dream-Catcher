@@ -48,12 +48,9 @@
         </div>
 
         <div *ngIf="!posts().length && !isLoading()" class="void-state">
-          <span class="icon">{{ genreQuery() ? '🌌' : '🕳️' }}</span>
-          <h3>{{ genreQuery() ? 'Снов в этом жанре пока никто не видел...' : 'A peaceful void' }}</h3>
-          <p>{{ genreQuery() ? 'Станьте первым, кто поделится таким сновидением!' : 'The collective consciousness is quiet. Try searching for other vibes.' }}</p>
-          <a *ngIf="genreQuery()" [routerLink]="['/feed']" [queryParams]="{genre: null}" class="btn-clear-filter">
-            Back to the collective
-          </a>
+          <span class="icon"></span>
+          <h3>A peaceful void</h3>
+          <p>The collective consciousness is quiet. Try searching for other vibes.</p>
         </div>
       </div>
     </div>

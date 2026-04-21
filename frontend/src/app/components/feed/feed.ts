@@ -2,7 +2,6 @@ import { Component, inject, signal, OnInit, AfterViewInit, ElementRef, ViewChild
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PostService } from '../../services/post/post';
 import { PostCreate } from '../posts/post-create/post-create';
 import { PostCard } from '../posts/post-card/post-card';
@@ -25,7 +24,6 @@ export class Feed implements OnInit, AfterViewInit, OnDestroy {
 
   public readonly posts = this._postService.posts;
   public readonly searchQuery = signal<string>('');
-  public readonly genreQuery = signal<string>('');
   public readonly isLoading = signal<boolean>(false);
   public readonly sortMode = signal<string>('newest');
   public readonly isSearching = signal<boolean>(false);
@@ -33,7 +31,6 @@ export class Feed implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit(): void {
     this._route.queryParams.subscribe(params => {
-      this.genreQuery.set(params['genre'] || '');
       if (params['hashtags']) {
         this.searchQuery.set(params['hashtags']);
       }
@@ -63,7 +60,7 @@ export class Feed implements OnInit, AfterViewInit, OnDestroy {
       ? this.searchQuery().split(' ').map(h => h.trim().replace(/#/g, '')).filter(h => h)
       : [];
     
-    this._postService.getPosts(hashtags, false, page, this.sortMode(), undefined, this.genreQuery() || undefined).subscribe({
+    this._postService.getPosts(hashtags, false, page, this.sortMode(), undefined, this._postService.selectedCategory() || undefined).subscribe({
       next: () => this.isLoading.set(false),
       error: () => this.isLoading.set(false)
     });

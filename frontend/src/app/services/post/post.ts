@@ -19,7 +19,7 @@ interface IBackendPost {
   author_is_private: boolean;
   title: string;
   content: string;
-  genre?: string;
+  category: string;
   hashtag_names?: string[];
   hashtags?: { id: number; name: string }[];
   created_at: string;
@@ -52,7 +52,7 @@ export class PostService {
   public readonly currentPage = signal<number>(1);
   public readonly selectedCategory = signal<string | null>(null);
 
-  private _fetchPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest', authorId?: number, authorUsername?: string, genre?: string): Observable<PaginatedResponse<IPost>> {
+  private _fetchPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest', authorId?: number, authorUsername?: string, category?: string): Observable<PaginatedResponse<IPost>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('sort', sort);
@@ -60,14 +60,15 @@ export class PostService {
     if (bookmarks) params = params.set('bookmarks', 'true');
     if (authorId) params = params.set('author', authorId.toString());
     if (authorUsername) params = params.set('author_username', authorUsername);
-    if (genre) params = params.set('genre', genre);
+    if (category) params = params.set('category', category);
     hashtags.forEach(h => params = params.append('hashtags', h));
 
     return this._http.get<PaginatedResponse<IPost>>(`${this._apiUrl}/posts/`, { params });
   }
 
-  public getPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest', authorId?: number, genre?: string): Observable<PaginatedResponse<IPost>> {
-    return this._fetchPosts(hashtags, bookmarks, page, sort, authorId, undefined, genre).pipe(
+  public getPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest', authorId?: number, category?: string): Observable<PaginatedResponse<IPost>> {
+    const activeCategory = category !== undefined ? category : (this.selectedCategory() ?? undefined);
+    return this._fetchPosts(hashtags, bookmarks, page, sort, authorId, undefined, activeCategory).pipe(
       map(response => ({
         ...response,
         results: response.results.map(p => this._mapPost(p as any))
@@ -104,24 +105,11 @@ export class PostService {
     return this.loadUserPosts(username, page);
   }
 
-  public createPost(title: string, content: string, hashtag_names: string[], genre?: string): Observable<IPost> {
-    const body: any = { title, content, hashtag_names };
-    if (genre) body.genre = genre;
-    
-    return this._http.post<IPost>(`${this._apiUrl}/posts/`, body).pipe(
+  public createPost(title: string, content: string, hashtag_names: string[], category: string): Observable<IPost> {
+    return this._http.post<IPost>(`${this._apiUrl}/posts/`, { title, content, hashtag_names, category }).pipe(
       map(p => this._mapPost(p as any)),
       tap(newPost => {
         this._posts.update(p => [newPost, ...p]);
-      })
-    );
-  }
-
-  public deletePost(postId: number): Observable<void> {
-    return this._http.delete<void>(`${this._apiUrl}/posts/${postId}/`).pipe(
-      tap(() => {
-        const removeFn = (posts: IPost[]) => posts.filter(p => p.id !== postId);
-        this._posts.update(removeFn);
-        this._userPosts.update(removeFn);
       })
     );
   }
@@ -163,7 +151,7 @@ export class PostService {
       author_is_private: !!p.author_is_private, 
       title: p.title || '',
       content: p.content || '',
-      genre: p.genre || '',
+      category: p.category as any,
       hashtag_names: hashtags,
       created_at: p.created_at,
       is_liked: !!p.is_liked,
