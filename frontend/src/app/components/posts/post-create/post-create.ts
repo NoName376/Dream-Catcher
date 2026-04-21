@@ -1,6 +1,7 @@
 import { Component, inject, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { PostService } from '../../../services/post/post';
 import { NotificationService } from '../../../services/notification';
 import { HashtagSelector } from '../hashtag-selector/hashtag-selector';
@@ -47,9 +48,23 @@ export class PostCreate {
           this.isSubmitting.set(false);
           this._notifService.show('Dream shared successfully! ✨');
         },
-        error: () => {
+        error: (err: HttpErrorResponse) => {
           this.isSubmitting.set(false);
-          this._notifService.show('Failed to share dream. 🌌', 'error');
+          let message = 'Failed to share dream. 🌌';
+          
+          if (!navigator.onLine) {
+            message = 'No internet connection. Please check your network. 📡';
+          } else if (err.status === 401) {
+            message = 'Session expired. Please log in again. 🔑';
+          } else if (err.status === 403) {
+            message = 'Privacy restriction or account issues. 🛡️';
+          } else if (err.error && typeof err.error === 'object') {
+             // Try to extract backend validation errors
+             const details = Object.values(err.error).flat().join(' ');
+             if (details) message = `Validation error: ${details}`;
+          }
+
+          this._notifService.show(message, 'error');
         }
       });
     }
