@@ -12,9 +12,11 @@
               (keyup.enter)="onSearch()"
               placeholder="Search collective dreams..."
             />
-            <button (click)="onSearch()" class="search-btn">✨</button>
+            <button (click)="isSearching() ? clearSearch() : onSearch()" class="search-btn">
+              {{ isSearching() ? '✕' : '🔍' }}
+            </button>
           </div>
-
+ 
           <div class="sort-filters">
             <button 
               [class.active]="sortMode() === 'newest'" 
@@ -23,12 +25,14 @@
             <button 
               [class.active]="sortMode() === 'popular'" 
               (click)="onSortChange('popular')"
-            >Lucid</button>
+            >Popular</button>
           </div>
         </div>
       </div>
 
-      <app-post-create></app-post-create>
+      @if (!isSearching()) {
+        <app-post-create></app-post-create>
+      }
 
       <div class="posts-feed">
         <app-post-card 
@@ -38,7 +42,7 @@
 
         <div #scrollTracker class="infinite-scroll-anchor">
           <div *ngIf="isLoading()" class="dream-loader">
-            <div class="sparkles">✨</div>
+            <div class="sparkles"></div>
             <span>Manifesting more dreams...</span>
           </div>
         </div>
@@ -55,7 +59,7 @@
     </div>
 
     <aside class="feed-sidebar">
-      <app-trending-hashtags (hashtagSelected)="onHashtagSelect($event)"></app-trending-hashtags>
+      <app-category-filter />
       
       <app-dream-facts></app-dream-facts>
     </aside>

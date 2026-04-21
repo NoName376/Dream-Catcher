@@ -74,18 +74,18 @@ export class PostCreate {
           this.hashtagSelector?.reset();
           this.selectedTags.set([]);
           this.isSubmitting.set(false);
-          this._notifService.show('Dream shared successfully! ✨');
+          this._notifService.show('Dream shared successfully!');
         },
         error: (err: HttpErrorResponse) => {
           this.isSubmitting.set(false);
-          let message = 'Failed to share dream. 🌌';
+          let message = 'Failed to share dream.';
           
           if (!navigator.onLine) {
-            message = 'No internet connection. Please check your network. 📡';
+            message = 'No internet connection. Please check your network.';
           } else if (err.status === 401) {
-            message = 'Session expired. Please log in again. 🔑';
+            message = 'Session expired. Please log in again.';
           } else if (err.status === 403) {
-            message = 'Privacy restriction or account issues. 🛡️';
+            message = 'Privacy restriction or account issues.';
           } else if (err.error && typeof err.error === 'object') {
              // Try to extract backend validation errors
              const details = Object.values(err.error).flat().join(' ');

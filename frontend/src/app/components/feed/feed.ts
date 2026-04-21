@@ -1,17 +1,18 @@
 import { Component, inject, signal, OnInit, AfterViewInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PostService } from '../../services/post/post';
 import { PostCreate } from '../posts/post-create/post-create';
 import { PostCard } from '../posts/post-card/post-card';
-import { TrendingHashtags } from './trending-hashtags/trending-hashtags';
 import { DreamFacts } from '../shared/dream-facts/dream-facts';
+import { CategoryFilterComponent } from '../layout/sidebar/category-filter/category-filter';
 
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [CommonModule, FormsModule, PostCreate, PostCard, TrendingHashtags, DreamFacts],
+  imports: [CommonModule, FormsModule, PostCreate, PostCard, DreamFacts, CategoryFilterComponent],
   templateUrl: './feed.html',
   styleUrl: './feed.css'
 })
@@ -27,11 +28,15 @@ export class Feed implements OnInit, AfterViewInit, OnDestroy {
   public readonly genreQuery = signal<string>('');
   public readonly isLoading = signal<boolean>(false);
   public readonly sortMode = signal<string>('newest');
+  public readonly isSearching = signal<boolean>(false);
   public readonly hasMore = this._postService.hasMore;
 
   public ngOnInit(): void {
     this._route.queryParams.subscribe(params => {
       this.genreQuery.set(params['genre'] || '');
+      if (params['hashtags']) {
+        this.searchQuery.set(params['hashtags']);
+      }
       this.initialLoad();
     });
   }
@@ -70,6 +75,15 @@ export class Feed implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public onSearch(): void {
+    if (this.searchQuery().trim()) {
+      this.isSearching.set(true);
+      this.initialLoad();
+    }
+  }
+
+  public clearSearch(): void {
+    this.searchQuery.set('');
+    this.isSearching.set(false);
     this.initialLoad();
   }
 

@@ -1,0 +1,19 @@
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Erase Dream?</h2>
+      <p>Are you sure you want to delete <strong>"{{ postTitle() }}"</strong>?</p>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn-cancel" [disabled]="isDeleting()" (click)="onCancel()">Cancel</button>
+      <button class="btn-delete" [disabled]="isDeleting()" (click)="onConfirm()">
+        @if (isDeleting()) {
+          <span class="loader"></span>
+        } @else {
+          Delete Forever
+        }
+      </button>
+    </div>
+  </div>
+</div>

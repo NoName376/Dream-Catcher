@@ -50,6 +50,7 @@ export class PostService {
   
   public readonly hasMore = signal<boolean>(false);
   public readonly currentPage = signal<number>(1);
+  public readonly selectedCategory = signal<string | null>(null);
 
   private _fetchPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest', authorId?: number, authorUsername?: string, genre?: string): Observable<PaginatedResponse<IPost>> {
     let params = new HttpParams()
@@ -129,6 +130,27 @@ export class PostService {
     const updateFn = (posts: IPost[]) => posts.map(p => p.id === postId ? { ...p, ...updates } : p);
     this._posts.update(updateFn);
     this._userPosts.update(updateFn);
+  }
+
+  public deletePost(postId: number): Observable<void> {
+    return this._http.delete<void>(`${this._apiUrl}/posts/${postId}/`).pipe(
+      tap(() => {
+        this._posts.update(posts => posts.filter(p => p.id !== postId));
+        this._userPosts.update(posts => posts.filter(p => p.id !== postId));
+      })
+    );
+  }
+
+  public getStats(year?: number, month?: number): Observable<any> {
+    let params = new HttpParams();
+    if (year) params = params.set('year', year.toString());
+    if (month) params = params.set('month', month.toString());
+    return this._http.get<any>(`${this._apiUrl}/posts/stats/`, { params });
+  }
+
+  public setCategory(category: string | null): void {
+    this.selectedCategory.set(category);
+    this.getPosts([], false, 1, 'newest', undefined, category || undefined).subscribe();
   }
 
   private _mapPost(p: IBackendPost): IPost {

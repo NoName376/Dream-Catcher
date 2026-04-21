@@ -121,6 +121,7 @@
 }
 
 .void-state {
+  grid-column: 1 / -1;
   text-align: center;
   padding: 80px 40px;
   background: rgba(255, 255, 255, 0.03);

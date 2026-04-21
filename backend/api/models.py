@@ -18,7 +18,7 @@ class CustomUser(AbstractUser):
         return self.email
 
 class Hashtag(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     usage_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
@@ -37,7 +37,7 @@ class Post(models.Model):
     ]
 
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts')
-    title = models.CharField(max_length=120, default='')
+    title = models.CharField(max_length=500, default='')
     content = models.TextField()
     genre = models.CharField(max_length=20, choices=GENRE_CHOICES, blank=True, null=True)
     hashtags = models.ManyToManyField(Hashtag, related_name='posts', blank=True)

@@ -1,3 +1,5 @@
+export type PostCategory = 'ordinary' | 'nightmare' | 'anxiety' | 'erotic' | 'archetypal';
+
 export interface IPost {
   id: number;
   author: number;

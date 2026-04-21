@@ -4,7 +4,7 @@
     [ngModel]="title()"
     (ngModelChange)="title.set($event)"
     placeholder="Dream title..."
-    maxlength="120"
+    maxlength="500"
     [disabled]="isSubmitting()"
     class="title-input"
   />
@@ -43,13 +43,19 @@
     </div>
   </div>
 
+  <div class="category-selector">
+    <select [ngModel]="category()" (ngModelChange)="category.set($event)" [disabled]="isSubmitting()">
+      <option value="" disabled selected>Select Category *</option>
+      @for (cat of categories; track cat.id) {
+        <option [value]="cat.id">{{ cat.name }}</option>
+      }
+    </select>
+  </div>
+
   <div class='footer'>
-    <span class='char-count' [class.limit]='content().length > 5000'>
-      {{ content().length }}/5000
-    </span>
     <button 
       class='btn-primary' 
-      [disabled]='!content().trim() || content().length > 5000 || isSubmitting()'
+      [disabled]='!content().trim() || !title().trim() || !category() || content().length > 5000 || isSubmitting()'
       (click)='onSubmit()'
     >
       <span *ngIf='!isSubmitting()'>Cast Dream</span>

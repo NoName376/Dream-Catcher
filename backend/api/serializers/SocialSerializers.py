@@ -47,7 +47,8 @@ class PostSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'is_private']
+        fields = ['id', 'email', 'username', 'is_private']
+        read_only_fields = ['id', 'email']
 
 class PasswordChangeSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
