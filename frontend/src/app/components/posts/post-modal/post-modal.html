@@ -4,9 +4,10 @@
       <div class="header-left">
         <h2 class="modal-title">{{ post().title || 'Untitled Dream' }}</h2>
         <div class="modal-meta">
-          <span class="author">@{{ post().author_username }}</span>
-          <span class="dot">·</span>
-          <span class="category">{{ post().category }}</span>
+          <span class="modal-author">@{{ post().author_username }}</span>
+          @if (post().genre) {
+            <span class="genre-badge" [attr.data-genre]="post().genre">{{ post().genre }}</span>
+          }
         </div>
       </div>
       

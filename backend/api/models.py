@@ -25,17 +25,21 @@ class Hashtag(models.Model):
         return f"#{self.name}"
 
 class Post(models.Model):
-    CATEGORY_CHOICES = [
-        ('ordinary', 'Ordinary'),
-        ('nightmare', 'Nightmare'),
-        ('anxiety', 'Anxiety'),
-        ('erotic', 'Erotic'),
-        ('archetypal', 'Archetypal'),
+    GENRE_CHOICES = [
+        ('Nightmares', 'Nightmares'),
+        ('Lucid Dreaming', 'Lucid Dreaming'),
+        ('Adventure', 'Adventure'),
+        ('Romance', 'Romance'),
+        ('Fantasy', 'Fantasy'),
+        ('Surrealism', 'Surrealism'),
+        ('Action', 'Action'),
+        ('Liminal', 'Liminal'),
     ]
+
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=500, default='')
     content = models.TextField()
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='ordinary')
+    genre = models.CharField(max_length=20, choices=GENRE_CHOICES, blank=True, null=True)
     hashtags = models.ManyToManyField(Hashtag, related_name='posts', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

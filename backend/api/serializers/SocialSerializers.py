@@ -20,12 +20,14 @@ class PostSerializer(serializers.ModelSerializer):
     likes_count = serializers.IntegerField(source='likes_received.count', read_only=True)
 
     content = serializers.CharField(max_length=5000)
+    title = serializers.CharField(required=False, allow_blank=True, max_length=120)
+    genre = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = Post
         fields = [
-            'id', 'author', 'author_username', 'author_is_private', 'title', 'content', 'category',
-            'hashtag_names', 'created_at', 'is_liked', 
+            'id', 'author', 'author_username', 'author_is_private', 'title', 'content', 
+            'genre', 'hashtag_names', 'created_at', 'is_liked', 
             'is_bookmarked', 'likes_count'
         ]
         read_only_fields = ['author', 'created_at']
