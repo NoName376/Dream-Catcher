@@ -1,0 +1,14 @@
+<div class="category-block">
+  <label class="block-label">Dream Filter</label>
+  <div class="custom-select-wrapper">
+    <select 
+      [ngModel]="selectedCategory()" 
+      (ngModelChange)="selectCategory($event)"
+      class="glass-select">
+      <option [ngValue]="null">All Dreams</option>
+      @for (cat of categories; track cat.id) {
+        <option [value]="cat.id">{{ cat.icon }} {{ cat.name }}</option>
+      }
+    </select>
+  </div>
+</div>

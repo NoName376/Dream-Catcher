@@ -32,6 +32,10 @@ export const routes: Routes = [
         loadComponent: () => import('./components/settings/settings/settings').then((m) => m.Settings)
       },
       {
+        path: 'analysis',
+        loadComponent: () => import('./components/analysis/analysis').then((m) => m.AnalysisComponent)
+      },
+      {
         path: '',
         redirectTo: 'feed',
         pathMatch: 'full'

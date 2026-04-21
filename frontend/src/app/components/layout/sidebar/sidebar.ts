@@ -15,10 +15,11 @@ export class Sidebar {
   private readonly _router = inject(Router);
 
   public readonly menuItems = [
-    { icon: '🌙', label: 'Feed', route: '/feed' },
-    { icon: '👤', label: 'Profile', route: '/profile' },
-    { icon: '🔖', label: 'Bookmarks', route: '/bookmarks' },
-    { icon: '⚙️', label: 'Settings', route: '/settings' }
+    { icon: '', label: 'Feed', route: '/feed' },
+    { icon: '', label: 'Profile', route: '/profile' },
+    { icon: '', label: 'Bookmarks', route: '/bookmarks' },
+    { icon: '', label: 'Analysis', route: '/analysis' },
+    { icon: '', label: 'Settings', route: '/settings' }
   ];
 
   public onLogout(): void {

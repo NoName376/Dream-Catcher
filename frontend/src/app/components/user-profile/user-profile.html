@@ -5,6 +5,9 @@
         <h1>@{{ user()?.username }}</h1>
         <p class='user-email'>{{ user()?.email }}</p>
       </div>
+      <div class="profile-actions" *ngIf="posts().length">
+        <button class="export-profile-btn" (click)="onExportProfile()">Export Journal</button>
+      </div>
     </div>
 
     <div class='profile-content'>

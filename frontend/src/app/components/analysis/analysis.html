@@ -1,0 +1,69 @@
+<div class="analysis-page">
+  <div class="analysis-header">
+    <h1>Dream Analysis</h1>
+    <p>Journey deep into the patterns of your subconscious</p>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label>Year</label>
+      <select [ngModel]="selectedYear()" (ngModelChange)="selectedYear.set($event); onFilterChange()" class="glass-select">
+        @for (year of years; track year) {
+          <option [value]="year">{{ year }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Month (Optional)</label>
+      <select [ngModel]="selectedMonth()" (ngModelChange)="selectedMonth.set($event); onFilterChange()" class="glass-select">
+        <option [ngValue]="null">All Months</option>
+        @for (month of months; track month.id) {
+          <option [value]="month.id">{{ month.name }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="analysis-loader">
+      <div class="sparkle-orbit"></div>
+      <p>Consulting the dream archives...</p>
+    </div>
+  } @else if (stats()) {
+    <div class="analysis-grid">
+      <div class="analysis-card category-stats">
+        <h2>Category Distribution</h2>
+        <div class="stats-list">
+          @for (cat of stats().categories; track cat.category) {
+            <div class="stat-row">
+              <span class="label">{{ getCategoryName(cat.category) }}</span>
+              <div class="bar-container">
+                <div class="bar" [style.width.%]="(cat.count / stats().categories[0].count) * 100"></div>
+              </div>
+              <span class="value">{{ cat.count }}</span>
+            </div>
+          }
+          @if (stats().categories.length === 0) {
+            <p class="empty-msg">No data for this period.</p>
+          }
+        </div>
+      </div>
+
+      <div class="analysis-card hashtag-stats">
+        <h2>Signature Hashtags</h2>
+        <div class="tag-cloud">
+          @for (tag of stats().hashtags; track tag.name) {
+            <button class="tag-pill" (click)="onHashtagClick(tag.name)">
+              <span class="tag-name">#{{ tag.name }}</span>
+              <span class="tag-count">{{ tag.count }}</span>
+            </button>
+          }
+          @if (stats().hashtags.length === 0) {
+            <p class="empty-msg">No signature tags found.</p>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

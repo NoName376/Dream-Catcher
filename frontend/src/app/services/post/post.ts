@@ -19,6 +19,7 @@ interface IBackendPost {
   author_is_private: boolean;
   title: string;
   content: string;
+  category: string;
   hashtag_names?: string[];
   hashtags?: { id: number; name: string }[];
   created_at: string;
@@ -49,8 +50,9 @@ export class PostService {
   
   public readonly hasMore = signal<boolean>(false);
   public readonly currentPage = signal<number>(1);
+  public readonly selectedCategory = signal<string | null>(null);
 
-  private _fetchPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest', authorId?: number, authorUsername?: string): Observable<PaginatedResponse<IPost>> {
+  private _fetchPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest', authorId?: number, authorUsername?: string, category?: string): Observable<PaginatedResponse<IPost>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('sort', sort);
@@ -58,13 +60,15 @@ export class PostService {
     if (bookmarks) params = params.set('bookmarks', 'true');
     if (authorId) params = params.set('author', authorId.toString());
     if (authorUsername) params = params.set('author_username', authorUsername);
+    if (category) params = params.set('category', category);
     hashtags.forEach(h => params = params.append('hashtags', h));
 
     return this._http.get<PaginatedResponse<IPost>>(`${this._apiUrl}/posts/`, { params });
   }
 
-  public getPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest', authorId?: number): Observable<PaginatedResponse<IPost>> {
-    return this._fetchPosts(hashtags, bookmarks, page, sort, authorId).pipe(
+  public getPosts(hashtags: string[] = [], bookmarks = false, page = 1, sort = 'newest', authorId?: number, category?: string): Observable<PaginatedResponse<IPost>> {
+    const activeCategory = category !== undefined ? category : (this.selectedCategory() ?? undefined);
+    return this._fetchPosts(hashtags, bookmarks, page, sort, authorId, undefined, activeCategory).pipe(
       map(response => ({
         ...response,
         results: response.results.map(p => this._mapPost(p as any))
@@ -101,8 +105,8 @@ export class PostService {
     return this.loadUserPosts(username, page);
   }
 
-  public createPost(title: string, content: string, hashtag_names: string[]): Observable<IPost> {
-    return this._http.post<IPost>(`${this._apiUrl}/posts/`, { title, content, hashtag_names }).pipe(
+  public createPost(title: string, content: string, hashtag_names: string[], category: string): Observable<IPost> {
+    return this._http.post<IPost>(`${this._apiUrl}/posts/`, { title, content, hashtag_names, category }).pipe(
       map(p => this._mapPost(p as any)),
       tap(newPost => {
         this._posts.update(p => [newPost, ...p]);
@@ -116,6 +120,27 @@ export class PostService {
     this._userPosts.update(updateFn);
   }
 
+  public deletePost(postId: number): Observable<void> {
+    return this._http.delete<void>(`${this._apiUrl}/posts/${postId}/`).pipe(
+      tap(() => {
+        this._posts.update(posts => posts.filter(p => p.id !== postId));
+        this._userPosts.update(posts => posts.filter(p => p.id !== postId));
+      })
+    );
+  }
+
+  public getStats(year?: number, month?: number): Observable<any> {
+    let params = new HttpParams();
+    if (year) params = params.set('year', year.toString());
+    if (month) params = params.set('month', month.toString());
+    return this._http.get<any>(`${this._apiUrl}/posts/stats/`, { params });
+  }
+
+  public setCategory(category: string | null): void {
+    this.selectedCategory.set(category);
+    this.getPosts([], false, 1, 'newest', undefined, category || undefined).subscribe();
+  }
+
   private _mapPost(p: IBackendPost): IPost {
     const hashtags = p.hashtag_names || (p.hashtags ? p.hashtags.map(h => h.name) : []);
 
@@ -126,6 +151,7 @@ export class PostService {
       author_is_private: !!p.author_is_private, 
       title: p.title || '',
       content: p.content || '',
+      category: p.category as any,
       hashtag_names: hashtags,
       created_at: p.created_at,
       is_liked: !!p.is_liked,

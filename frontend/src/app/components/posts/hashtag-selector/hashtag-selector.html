@@ -12,6 +12,7 @@
       [(ngModel)]='hashtagInput'
       (keydown.enter)='onEnter(); $event.preventDefault()'
       placeholder='Add dream keys (max 7)...'
+      maxlength="100"
       [disabled]='selectedHashtags().length >= maxTags'
     />
     <button 

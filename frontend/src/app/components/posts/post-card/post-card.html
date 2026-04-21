@@ -1,8 +1,27 @@
-<article class="post-card">
+<article class="post-card" [class.deleted]="isDeleted()">
   <div class="post-card-inner">
     <div class="card-top">
-      <h3 class="dream-title">{{ post().title || 'Untitled Dream' }}</h3>
-      <span class="author">@{{ post().author_username }}</span>
+      <div class="card-header">
+        <div class="title-meta">
+          <h3 class="dream-title">{{ post().title || 'Untitled Dream' }}</h3>
+          <div class="user-meta">
+            <span class="author">@{{ post().author_username }}</span>
+            <span class="category-badge">{{ post().category }}</span>
+          </div>
+        </div>
+        
+        <div class="options-container">
+          <button class="options-btn" (click)="toggleMenu($event)">⋮</button>
+          @if (showMenu()) {
+            <div class="options-menu" (click)="$event.stopPropagation()">
+              <button class="menu-item" (click)="onExport($event)">Export to PDF</button>
+              @if (isOwner) {
+                <button class="menu-item delete" (click)="openDeleteModal($event)">Delete Dream</button>
+              }
+            </div>
+          }
+        </div>
+      </div>
 
       @if (post().hashtag_names.length) {
         <div class="hashtags">
@@ -27,5 +46,14 @@
 </article>
 
 @if (isModalOpen()) {
-  <app-post-modal [post]="livePost()" (closed)="closeModal()" />
+  <app-post-modal [post]="livePost()" (closed)="closeModal()" (deleted)="onDeleteSuccess()" />
+}
+
+@if (isDeleteModalOpen()) {
+  <app-delete-confirm-modal 
+    [postId]="post().id" 
+    [postTitle]="post().title"
+    (close)="closeDeleteModal()"
+    (deleted)="onDeleteSuccess()"
+  />
 }
