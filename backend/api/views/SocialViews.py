@@ -4,11 +4,10 @@ from rest_framework.response import Response
 from django.db.models import Count, Q
 from api.models import Post, Hashtag, Like, Bookmark
 from api.serializers.SocialSerializers import PostSerializer, HashtagSerializer
-from api.permissions import IsOwnerOrAdmin
 
 class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrAdmin]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         user = self.request.user
@@ -28,10 +27,6 @@ class PostViewSet(viewsets.ModelViewSet):
         hashtag_names = self.request.query_params.getlist('hashtags')
         if hashtag_names:
             queryset = queryset.filter(hashtags__name__in=hashtag_names).distinct()
-            
-        genre = self.request.query_params.get('genre')
-        if genre:
-            queryset = queryset.filter(genre=genre.strip())
         
         author_id = self.request.query_params.get('author')
         author_username = self.request.query_params.get('author_username')

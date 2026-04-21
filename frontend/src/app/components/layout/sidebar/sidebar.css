@@ -28,26 +28,8 @@
   letter-spacing: -0.5px;
 }
 
-.sidebar-content {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  padding-right: 8px;
-  margin-bottom: 24px;
-}
-
-.sidebar-content::-webkit-scrollbar {
-  width: 4px;
-}
-
-.sidebar-content::-webkit-scrollbar-thumb {
-  background: rgba(168, 230, 207, 0.2);
-  border-radius: 4px;
-}
-
 .nav-menu {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -76,18 +58,7 @@
   box-shadow: inset 0 0 0 1px rgba(168, 230, 207, 0.2);
 }
 
-.sidebar-section h4 {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: rgba(168, 230, 207, 0.4);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
-  padding-left: 16px;
-}
-
 .sidebar-footer {
-  margin-top: auto;
   padding-top: 24px;
   border-top: 1px solid rgba(168, 230, 207, 0.1);
 }

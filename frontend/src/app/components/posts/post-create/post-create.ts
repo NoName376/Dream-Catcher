@@ -21,27 +21,17 @@ export class PostCreate {
   public readonly title = signal<string>('');
   public readonly content = signal<string>('');
   public readonly selectedTags = signal<string[]>([]);
-  public readonly selectedGenre = signal<string>('');
   public readonly isSubmitting = signal<boolean>(false);
   public readonly showHashtagWarning = signal<boolean>(false);
-  public readonly genres = [
-    { id: 'Nightmares', label: 'Nightmares', icon: '🌙' },
-    { id: 'Lucid Dreaming', label: 'Lucid Dreaming', icon: '✨' },
-    { id: 'Adventure', label: 'Adventure', icon: '🧭' },
-    { id: 'Romance', label: 'Romance', icon: '💕' },
-    { id: 'Fantasy', label: 'Fantasy', icon: '🦄' },
-    { id: 'Surrealism', label: 'Surrealism', icon: '🌀' },
-    { id: 'Action', label: 'Action', icon: '💥' },
-    { id: 'Liminal', label: 'Liminal', icon: '🚪' }
-  ];
+  public readonly category = signal<string>('');
 
-  public selectGenre(id: string): void {
-    if (this.selectedGenre() === id) {
-      this.selectedGenre.set('');
-    } else {
-      this.selectedGenre.set(id);
-    }
-  }
+  public categories = [
+    { id: 'ordinary', name: 'Ordinary' },
+    { id: 'nightmare', name: 'Nightmare' },
+    { id: 'anxiety', name: 'Anxiety' },
+    { id: 'erotic', name: 'Erotic' },
+    { id: 'archetypal', name: 'Archetypal' }
+  ];
 
   public onTagsChanged(tags: string[]): void {
     this.selectedTags.set(tags);
@@ -56,21 +46,13 @@ export class PostCreate {
       return;
     }
 
-    const postData = {
-      title: this.title(),
-      content: this.content(),
-      hashtag_names: this.selectedTags(),
-      genre: this.selectedGenre()
-    };
-
-    if (this.content().trim()) {
-      console.log("ОТПРАВЛЯЕМЫЕ ДАННЫЕ:", postData);
+    if (this.title().trim() && this.content().trim() && this.category()) {
       this.isSubmitting.set(true);
-      this._postService.createPost(postData.title, postData.content, postData.hashtag_names, postData.genre).subscribe({
+      this._postService.createPost(this.title(), this.content(), this.selectedTags(), this.category()).subscribe({
         next: () => {
           this.title.set('');
           this.content.set('');
-          this.selectedGenre.set('');
+          this.category.set('');
           this.hashtagSelector?.reset();
           this.selectedTags.set([]);
           this.isSubmitting.set(false);
@@ -95,8 +77,6 @@ export class PostCreate {
           this._notifService.show(message, 'error');
         }
       });
-    } else {
-      console.warn("Content is empty, skipping submission.");
     }
   }
 }

@@ -1,4 +1,3 @@
-import { Component, inject, input, signal, computed } from '@angular/core';
 import { Component, inject, input, signal, HostListener } from '@angular/core';
 import { IPost } from '../../../interfaces/post';
 import { PostService } from '../../../services/post/post';
@@ -19,7 +18,6 @@ import { PdfService } from '../../../services/pdf.service';
 export class PostCard {
   private readonly _authService = inject(AuthService);
   private readonly _postService = inject(PostService);
-  private readonly _authService = inject(AuthService);
   private readonly _pdfService = inject(PdfService);
 
   public readonly post = input.required<IPost>();
@@ -32,17 +30,6 @@ export class PostCard {
     const user = this._authService.currentUser();
     if (!user) return false;
     return user.id === this.post().author || user.username === this.post().author_username;
-  }
-
-  public readonly isOwner = computed(() => {
-    const user = this._authService.currentUser();
-    return !!user && user.id === this.post().author;
-  });
-
-  public onDelete(): void {
-    if (confirm('Вы уверены, что хотите удалить этот сон?')) {
-      this._postService.deletePost(this.post().id).subscribe();
-    }
   }
 
   public livePost(): IPost {
