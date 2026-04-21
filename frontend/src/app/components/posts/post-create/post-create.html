@@ -9,6 +9,24 @@
     class="title-input"
   />
 
+  <div class="genre-selection">
+    <label class="section-label">Select Genre</label>
+    <div class="genre-chips">
+      @for (genre of genres; track genre.id) {
+        <button 
+          type="button"
+          class="genre-chip"
+          [class.selected]="selectedGenre() === genre.id"
+          (click)="selectGenre(genre.id)"
+          [disabled]="isSubmitting()"
+        >
+          <span class="icon">{{ genre.icon }}</span>
+          <span class="label">{{ genre.label }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
   <textarea
     [ngModel]='content()'
     (ngModelChange)='content.set($event)'

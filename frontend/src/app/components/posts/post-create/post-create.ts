@@ -20,8 +20,27 @@ export class PostCreate {
   public readonly title = signal<string>('');
   public readonly content = signal<string>('');
   public readonly selectedTags = signal<string[]>([]);
+  public readonly selectedGenre = signal<string>('');
   public readonly isSubmitting = signal<boolean>(false);
   public readonly showHashtagWarning = signal<boolean>(false);
+  public readonly genres = [
+    { id: 'Nightmares', label: 'Nightmares', icon: '🌙' },
+    { id: 'Lucid Dreaming', label: 'Lucid Dreaming', icon: '✨' },
+    { id: 'Adventure', label: 'Adventure', icon: '🧭' },
+    { id: 'Romance', label: 'Romance', icon: '💕' },
+    { id: 'Fantasy', label: 'Fantasy', icon: '🦄' },
+    { id: 'Surrealism', label: 'Surrealism', icon: '🌀' },
+    { id: 'Action', label: 'Action', icon: '💥' },
+    { id: 'Liminal', label: 'Liminal', icon: '🚪' }
+  ];
+
+  public selectGenre(id: string): void {
+    if (this.selectedGenre() === id) {
+      this.selectedGenre.set('');
+    } else {
+      this.selectedGenre.set(id);
+    }
+  }
 
   public onTagsChanged(tags: string[]): void {
     this.selectedTags.set(tags);
@@ -36,22 +55,34 @@ export class PostCreate {
       return;
     }
 
-    if (this.title().trim() && this.content().trim()) {
+    const postData = {
+      title: this.title(),
+      content: this.content(),
+      hashtag_names: this.selectedTags(),
+      genre: this.selectedGenre()
+    };
+
+    if (this.content().trim()) {
+      console.log("ОТПРАВЛЯЕМЫЕ ДАННЫЕ:", postData);
       this.isSubmitting.set(true);
-      this._postService.createPost(this.title(), this.content(), this.selectedTags()).subscribe({
+      this._postService.createPost(postData.title, postData.content, postData.hashtag_names, postData.genre).subscribe({
         next: () => {
           this.title.set('');
           this.content.set('');
+          this.selectedGenre.set('');
           this.hashtagSelector?.reset();
           this.selectedTags.set([]);
           this.isSubmitting.set(false);
           this._notifService.show('Dream shared successfully! ✨');
         },
-        error: () => {
+        error: (err) => {
           this.isSubmitting.set(false);
+          console.error("Ошибка сервера:", err.error || err);
           this._notifService.show('Failed to share dream. 🌌', 'error');
         }
       });
+    } else {
+      console.warn("Content is empty, skipping submission.");
     }
   }
 }

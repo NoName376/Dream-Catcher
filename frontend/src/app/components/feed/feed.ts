@@ -1,6 +1,7 @@
 import { Component, inject, signal, OnInit, AfterViewInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PostService } from '../../services/post/post';
 import { PostCreate } from '../posts/post-create/post-create';
 import { PostCard } from '../posts/post-card/post-card';
@@ -9,24 +10,29 @@ import { TrendingHashtags } from './trending-hashtags/trending-hashtags';
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [CommonModule, FormsModule, PostCreate, PostCard, TrendingHashtags],
+  imports: [CommonModule, FormsModule, RouterModule, PostCreate, PostCard, TrendingHashtags],
   templateUrl: './feed.html',
   styleUrl: './feed.css'
 })
 export class Feed implements OnInit, AfterViewInit, OnDestroy {
   private readonly _postService = inject(PostService);
+  private readonly _route = inject(ActivatedRoute);
   
   @ViewChild('scrollTracker') scrollTracker?: ElementRef;
   private _observer?: IntersectionObserver;
 
   public readonly posts = this._postService.posts;
   public readonly searchQuery = signal<string>('');
+  public readonly genreQuery = signal<string>('');
   public readonly isLoading = signal<boolean>(false);
   public readonly sortMode = signal<string>('newest');
   public readonly hasMore = this._postService.hasMore;
 
   public ngOnInit(): void {
-    this.initialLoad();
+    this._route.queryParams.subscribe(params => {
+      this.genreQuery.set(params['genre'] || '');
+      this.initialLoad();
+    });
   }
 
   public ngAfterViewInit(): void {
@@ -51,7 +57,7 @@ export class Feed implements OnInit, AfterViewInit, OnDestroy {
       ? this.searchQuery().split(' ').map(h => h.trim().replace(/#/g, '')).filter(h => h)
       : [];
     
-    this._postService.getPosts(hashtags, false, page, this.sortMode()).subscribe({
+    this._postService.getPosts(hashtags, false, page, this.sortMode(), undefined, this.genreQuery() || undefined).subscribe({
       next: () => this.isLoading.set(false),
       error: () => this.isLoading.set(false)
     });

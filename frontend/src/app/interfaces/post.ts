@@ -5,6 +5,7 @@ export interface IPost {
   author_is_private: boolean;
   title: string;
   content: string;
+  genre: string;
   hashtag_names: string[];
   created_at: string;
   is_liked: boolean;

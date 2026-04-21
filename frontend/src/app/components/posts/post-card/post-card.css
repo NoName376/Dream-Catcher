@@ -4,6 +4,7 @@
 }
 
 .post-card-inner {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -17,6 +18,79 @@
   transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
   overflow: hidden;
+}
+
+.genre-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+/* Genre-specific colors */
+.genre-badge[data-genre="Nightmares"] {
+  background: rgba(45, 0, 77, 0.4);
+  color: #d4aaff;
+  border-color: rgba(212, 170, 255, 0.3);
+}
+
+.genre-badge[data-genre="Romance"] {
+  background: rgba(255, 105, 180, 0.2);
+  color: #ffb3d9;
+  border-color: rgba(255, 179, 217, 0.3);
+}
+
+.genre-badge[data-genre="Liminal"] {
+  background: rgba(108, 117, 125, 0.3);
+  color: #e9ecef;
+  border-color: rgba(233, 236, 239, 0.3);
+}
+
+.genre-badge[data-genre="Lucid Dreaming"] {
+  background: rgba(0, 191, 255, 0.2);
+  color: #b3e5fc;
+  border-color: rgba(179, 229, 252, 0.3);
+}
+
+.genre-badge[data-genre="Adventure"] {
+  background: rgba(255, 140, 0, 0.2);
+  color: #ffe0b3;
+  border-color: rgba(255, 224, 179, 0.3);
+}
+
+.genre-badge[data-genre="Fantasy"] {
+  background: rgba(138, 43, 226, 0.2);
+  color: #e1b3ff;
+  border-color: rgba(225, 179, 255, 0.3);
+}
+
+.genre-badge[data-genre="Surrealism"] {
+  background: rgba(0, 255, 127, 0.15);
+  color: #b3ffda;
+  border-color: rgba(179, 255, 218, 0.3);
+}
+
+.genre-badge[data-genre="Action"] {
+  background: rgba(255, 69, 0, 0.2);
+  color: #ffccbc;
+  border-color: rgba(255, 204, 188, 0.3);
+}
+
+.post-card-inner:hover .genre-badge {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .post-card-inner:hover {
@@ -142,6 +216,11 @@
 
 .interaction-btn.bookmark.active {
   color: #ffd700;
+}
+
+.interaction-btn.delete-btn:hover {
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
 }
 
 .interaction-btn .count {

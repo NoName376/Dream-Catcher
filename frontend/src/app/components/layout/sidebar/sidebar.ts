@@ -21,6 +21,17 @@ export class Sidebar {
     { icon: '⚙️', label: 'Settings', route: '/settings' }
   ];
 
+  public readonly genres = [
+    { id: 'Nightmares', label: 'Nightmares', icon: '🌙' },
+    { id: 'Lucid Dreaming', label: 'Lucid Dreaming', icon: '✨' },
+    { id: 'Adventure', label: 'Adventure', icon: '🧭' },
+    { id: 'Romance', label: 'Romance', icon: '💕' },
+    { id: 'Fantasy', label: 'Fantasy', icon: '🦄' },
+    { id: 'Surrealism', label: 'Surrealism', icon: '🌀' },
+    { id: 'Action', label: 'Action', icon: '💥' },
+    { id: 'Liminal', label: 'Liminal', icon: '🚪' }
+  ];
+
   public onLogout(): void {
     this._authService.logout();
     this._router.navigate(['/login']);
